@@ -1,24 +1,76 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
+use App\Http\Controllers\Public\FotografoController;
+use App\Http\Controllers\Fotografo\FotografoDashboardController;
+use App\Http\Controllers\Fotografo\AlbumController;
+use App\Http\Controllers\Fotografo\ProfileController;
+use App\Http\Controllers\Cosplayer\CosplayerDashboardController;
+use App\Http\Controllers\Cosplayer\PhotoController;
+use App\Http\Controllers\Public\PublicAlbumController;
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $role = auth()->user()->role;
+
+    return $role === 'fotografo'
+        ? redirect()->route('fotografo.dashboard')
+        : redirect()->route('cosplayer.dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+
+
+/**
+ * Sección Fotógrafo
+ */
+Route::middleware(['auth', 'role:fotografo'])
+    ->prefix('fotografo')
+    ->name('fotografo.')
+    ->group(function () {
+        Route::get('/dashboard', [FotografoDashboardController::class, 'index'])->name('dashboard');
+
+        // Perfil fotógrafo
+        Route::get('/perfil', [ProfileController::class, 'edit'])->name('perfil.edit');
+        Route::post('/perfil', [ProfileController::class, 'update'])->name('perfil.update');
+
+        // Álbumes (MVP)
+        Route::get('/albums', [AlbumController::class, 'index'])->name('albums.index');
+        Route::get('/albums/create', [AlbumController::class, 'create'])->name('albums.create');
+        Route::post('/albums', [AlbumController::class, 'store'])->name('albums.store');
+        Route::get('/albums/{album}/edit', [AlbumController::class, 'edit'])->name('albums.edit');
+        Route::put('/albums/{album}', [AlbumController::class, 'update'])->name('albums.update');
+        Route::delete('/albums/{album}', [AlbumController::class, 'destroy'])->name('albums.destroy');
+    });
+
+/**
+ * Sección Cosplayer
+ */
+Route::middleware(['auth', 'role:cosplayer'])
+    ->prefix('cosplayer')
+    ->name('cosplayer.')
+    ->group(function () {
+        Route::get('/dashboard', [CosplayerDashboardController::class, 'index'])->name('dashboard');
+
+        // Fotos cosplayer (MVP: sube a storage local)
+        Route::get('/mis-fotos', [PhotoController::class, 'index'])->name('photos.index');
+        Route::post('/mis-fotos', [PhotoController::class, 'store'])->name('photos.store');
+        Route::delete('/mis-fotos/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
+    });
+
+/**
+ * Público (sin login)
+ */
+
+
+Route::get('/fotografos', [FotografoController::class, 'index'])->name('fotografos.index');
+Route::get('/fotografos/{user}', [FotografoController::class, 'show'])->name('fotografos.show');
+
+Route::get('/albums/public', [PublicAlbumController::class, 'index'])->name('albums.public');
+
+
+
+
 
 require __DIR__.'/auth.php';

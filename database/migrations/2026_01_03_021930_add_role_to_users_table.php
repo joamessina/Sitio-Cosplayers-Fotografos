@@ -11,22 +11,18 @@ class AddRoleToUsersTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
-    }
+public function up(): void
+{
+    Schema::table('users', function (Blueprint $table) {
+        $table->enum('role', ['cosplayer', 'fotografo'])->after('email')->default('cosplayer');
+    });
+}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
-    }
+public function down(): void
+{
+    Schema::table('users', function (Blueprint $table) {
+        $table->dropColumn('role');
+    });
+}
+
 }

@@ -31,24 +31,26 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+        'role' => ['required', 'in:cosplayer,fotografo'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+        'name' => $request->input('name'),
+        'email' => strtolower($request->input('email')),
+        'password' => Hash::make($request->input('password')),
+        'role' => $request->input('role'),
+    ]);
 
-        event(new Registered($user));
+    event(new Registered($user));
+    Auth::login($user);
 
-        Auth::login($user);
+    return redirect(RouteServiceProvider::HOME);
+}
 
-        return redirect(RouteServiceProvider::HOME);
-    }
 }

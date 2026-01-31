@@ -11,6 +11,8 @@ use App\Models\CosplayerPhoto;
 use App\Models\PhotographerProfile;
 use App\Models\Album;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;

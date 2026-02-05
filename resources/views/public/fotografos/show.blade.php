@@ -91,23 +91,90 @@
                 </div>
             </div>
 
-            {{-- Sección de álbumes (para la Fase 2) --}}
-            <div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Álbumes</h2>
+{{-- Sección de álbumes --}}
+<div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="text-xl font-semibold text-gray-900">Álbumes</h2>
+            <p class="text-sm text-gray-600 mt-1">
+                {{ $albums->count() }} {{ $albums->count() === 1 ? 'álbum público' : 'álbumes públicos' }}
+            </p>
+        </div>
+    </div>
+    
+    @if($albums->isEmpty())
+        {{-- Estado vacío --}}
+        <div class="rounded-lg bg-gray-50 p-8 ring-1 ring-gray-200 text-center">
+            <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <p class="text-gray-700 font-medium">Este fotógrafo todavía no tiene álbumes públicos</p>
+            <p class="text-sm text-gray-600 mt-2">
+                Los álbumes aparecerán aquí cuando el fotógrafo los marque como públicos.
+            </p>
+        </div>
+    @else
+        {{-- Grid de álbumes --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @foreach($albums as $album)
+                <div class="bg-white rounded-xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-md transition">
+                    
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                            {{ $album->title }}
+                        </h3>
+                        
+                        @if($album->event)
+                            <p class="text-sm text-gray-600">
+                                📸 {{ $album->event }}
+                            </p>
+                        @endif
 
-                <div class="rounded-lg bg-gray-50 p-8 ring-1 ring-gray-200 text-center">
-                    <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                    <p class="text-gray-700 font-medium">Próximamente: Álbumes de fotos</p>
-                    <p class="text-sm text-gray-600 mt-2">
-                        Esta funcionalidad se implementará en la Fase 2.
-                    </p>
+                        {{-- Información adicional --}}
+                        <div class="space-y-2 mt-4 text-sm text-gray-600">
+                            @if($album->event_date)
+                                <p class="flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    {{ \Carbon\Carbon::parse($album->event_date)->format('d/m/Y') }}
+                                </p>
+                            @endif
+
+                            @if($album->location)
+                                <p class="flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    {{ $album->location }}
+                                </p>
+                            @endif
+
+                            @if($album->description)
+                                <p class="text-gray-700 mt-3 line-clamp-3">
+                                    {{ $album->description }}
+                                </p>
+                            @endif
+                        </div>
+
+                        @if($album->drive_url)
+                            <a href="{{ $album->drive_url }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               class="inline-flex items-center gap-2 mt-4 rounded-lg bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700 transition">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972a6.033 6.033 0 110-12.064c1.498 0 2.866.549 3.921 1.453l2.814-2.814A9.969 9.969 0 0012.545 2C7.021 2 2.543 6.477 2.543 12s4.478 10 10.002 10c8.396 0 10.249-7.85 9.426-11.748l-9.426-.013z"/>
+                                </svg>
+                                Ver fotos en Drive
+                            </a>
+                        @endif
+                    </div>
                 </div>
-            </div>
+            @endforeach
+        </div>
+    @endif
+</div>
 
             {{-- Botón volver --}}
             <div class="text-center">

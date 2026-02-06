@@ -21,6 +21,15 @@ class FotografoController extends Controller
     {
         abort_unless($user->role === 'fotografo', 404);
 
-        return view('public.fotografos.show', compact('user'));
+        // Cargar el perfil del fotógrafo
+        $user->load('photographerProfile');
+
+        // Cargar álbumes públicos del fotógrafo
+        $albums = $user->albums()
+            ->where('is_public', true)
+            ->latest()
+            ->get();
+
+        return view('public.fotografos.show', compact('user', 'albums'));
     }
 }

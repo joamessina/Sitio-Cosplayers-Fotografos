@@ -16,7 +16,9 @@
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('fotografo.albums.store') }}" class="space-y-6">
+                <form method="POST" action="{{ route('fotografo.albums.store') }}" enctype="multipart/form-data"
+                    class="space-y-6">
+
                     @csrf
 
                     {{-- Título --}}
@@ -111,6 +113,26 @@
                         </p>
                     </div>
 
+                    {{-- Miniatura del álbum --}}
+                    <div>
+                        <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">
+                            Imagen de portada (opcional)
+                        </label>
+                        <input type="file" name="thumbnail" id="thumbnail"
+                            accept="image/jpeg,image/png,image/jpg,image/webp"
+                            class="block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-lg file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-indigo-50 file:text-indigo-700
+                  hover:file:bg-indigo-100
+                  transition">
+                        <p class="mt-2 text-xs text-gray-500">JPG, PNG o WEBP. Máximo 2MB. Se verá en el listado
+                            público.</p>
+                        @error('thumbnail')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                     {{-- Checkbox público --}}
                     <div class="flex items-start">
                         <div class="flex items-center h-5">

@@ -16,7 +16,8 @@
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('fotografo.albums.update', $album) }}" class="space-y-6">
+                <form method="POST" action="{{ route('fotografo.albums.update', $album) }}" enctype="multipart/form-data"
+                    class="space-y-6">
                     @csrf
                     @method('PUT')
 
@@ -112,6 +113,37 @@
                         <p class="mt-1 text-xs text-gray-500">
                             URL completa de la carpeta compartida de Google Drive.
                         </p>
+                    </div>
+
+                    {{-- Miniatura del álbum --}}
+                    <div>
+                        <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">
+                            Imagen de portada (opcional)
+                        </label>
+
+                        @if ($album->thumbnail)
+                            <div class="mb-4">
+                                <img src="{{ asset('storage/' . $album->thumbnail) }}" alt="Miniatura actual"
+                                    class="w-48 h-48 object-cover rounded-xl ring-2 ring-gray-200 shadow-sm">
+                                <p class="text-xs text-gray-500 mt-2">Imagen actual (subí una nueva para reemplazarla)
+                                </p>
+                            </div>
+                        @endif
+
+                        <input type="file" name="thumbnail" id="thumbnail"
+                            accept="image/jpeg,image/png,image/jpg,image/webp"
+                            class="block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-lg file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-indigo-50 file:text-indigo-700
+                  hover:file:bg-indigo-100
+                  transition">
+                        <p class="mt-2 text-xs text-gray-500">JPG, PNG o WEBP. Máximo 2MB. Se verá en el listado
+                            público.</p>
+                        @error('thumbnail')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Checkbox público --}}

@@ -11,6 +11,8 @@ class Album extends Model
         'title',
         'event',
         'event_date',
+        'drive_url',
+        'thumbnail',
         'location',
         'description',
         'drive_url',

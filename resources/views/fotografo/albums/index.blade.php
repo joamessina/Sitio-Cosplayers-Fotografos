@@ -43,34 +43,51 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($albums as $album)
                         <div
-                            class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-md transition">
+                            class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-md transition group">
 
-                            {{-- Header del card --}}
-                            <div class="p-6">
-                                <div class="flex items-start justify-between gap-3 mb-3">
-                                    <div class="flex-1">
-                                        <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">
-                                            {{ $album->title }}
-                                        </h3>
+                            {{-- Thumbnail --}}
+                            <div
+                                class="aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center relative overflow-hidden">
+                                @if ($album->thumbnail)
+                                    <img src="{{ asset('storage/' . $album->thumbnail) }}" alt="{{ $album->title }}"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                @else
+                                    <svg class="w-16 h-16 text-indigo-300" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                @endif
 
-                                        @if ($album->event)
-                                            <p class="text-sm text-gray-600 mt-1">
-                                                📸 {{ $album->event }}
-                                            </p>
-                                        @endif
-                                    </div>
-
-                                    {{-- Badge público/privado --}}
+                                {{-- Badge público/privado (superpuesto) --}}
+                                <div class="absolute top-3 right-3">
                                     @if ($album->is_public)
                                         <span
-                                            class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                            class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 ring-1 ring-green-200">
                                             Público
                                         </span>
                                     @else
                                         <span
-                                            class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                                            class="inline-flex items-center rounded-full bg-gray-800/80 backdrop-blur-sm px-2.5 py-0.5 text-xs font-medium text-white">
                                             Privado
                                         </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Contenido del card --}}
+                            <div class="p-6">
+                                <div class="mb-3">
+                                    <h3
+                                        class="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-indigo-600 transition">
+                                        {{ $album->title }}
+                                    </h3>
+
+                                    @if ($album->event)
+                                        <p class="text-sm text-gray-600 mt-1">
+                                            📸 {{ $album->event }}
+                                        </p>
                                     @endif
                                 </div>
 

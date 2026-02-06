@@ -21,7 +21,7 @@ public function edit()
 
     $profile = $user->photographerProfile;
 
-    return view('fotografo.perfil.edit', compact('profile'));
+    return view('fotografo.perfil.edit', compact('user','profile'));
 }
 
     public function update(Request $request)

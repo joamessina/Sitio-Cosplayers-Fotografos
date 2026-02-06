@@ -13,17 +13,35 @@
                     </div>
                 </div>
 
-                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     @forelse($fotografos as $f)
-                        <a href="{{ route('fotografos.show', $f) }}"
-                           class="border rounded-lg p-4 hover:bg-gray-50 transition">
-                            <div class="font-semibold text-gray-900">{{ $f->name }}</div>
-                            <div class="text-sm text-gray-600">Ver perfil</div>
-                        </a>
+                        <div class="border rounded-lg p-4 hover:shadow-md transition">
+                            <div class="font-semibold text-gray-900 mb-1">{{ $f->name }}</div>
+                            <div class="text-sm text-gray-600 mb-3">
+                                @if ($f->photographerProfile && $f->photographerProfile->location)
+                                    📍 {{ $f->photographerProfile->location }}
+                                @else
+                                    Fotógrafo
+                                @endif
+                            </div>
+
+                            {{-- Botones de acción --}}
+                            <div class="flex gap-2">
+                                <a href="{{ route('fotografos.show', $f) }}"
+                                    class="flex-1 text-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">
+                                    Ver perfil
+                                </a>
+                                <a href="{{ route('portfolio.show', $f->photographerProfile->instagram ?? Str::before($f->email, '@')) }}"
+                                    class="flex-1 text-center px-4 py-2 bg-indigo-600 rounded-lg text-sm text-white hover:bg-indigo-700 transition">
+                                    Portfolio
+                                </a>
+                            </div>
+                        </div>
                     @empty
-                        <p class="text-gray-600">Todavía no hay fotógrafos registrados.</p>
+                        <p class="text-gray-600 col-span-2">Todavía no hay fotógrafos registrados.</p>
                     @endforelse
                 </div>
+
             </div>
         </div>
     </div>

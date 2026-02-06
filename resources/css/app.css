@@ -23,3 +23,184 @@
         @apply inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50;
     }
 }
+
+/* Hero gradient background */
+.hero-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+}
+
+/* Card hover effects */
+.album-card {
+    transition: all 0.3s ease;
+}
+
+.album-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Stats animation */
+.stat-number {
+    animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Feature cards */
+.feature-card {
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: scale(1.05);
+}
+
+@import "custom.css";
+
+/* ========================================
+   FORMULARIOS Y PERFILES
+   ======================================== */
+
+/* Section Headers */
+.profile-section-header {
+    @apply flex items-center gap-3 pb-6 border-b border-gray-200;
+}
+
+.profile-section-icon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center;
+}
+
+.profile-section-icon--indigo {
+    @apply bg-indigo-100 text-indigo-600;
+}
+
+.profile-section-icon--purple {
+    @apply bg-purple-100 text-purple-600;
+}
+
+.profile-section-title {
+    @apply text-lg font-semibold text-gray-900;
+}
+
+.profile-section-subtitle {
+    @apply text-sm text-gray-600;
+}
+
+/* Form Cards */
+.profile-card {
+    @apply bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200 space-y-6;
+}
+
+/* Form Labels */
+.form-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.form-label-required::after {
+    content: "*";
+    @apply text-red-500 ml-1;
+}
+
+/* Form Inputs */
+.form-input {
+    @apply w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition;
+}
+
+.form-input--with-icon-left {
+    @apply pl-11 pr-4 py-3;
+}
+
+.form-input--with-prefix {
+    @apply pl-9 pr-4 py-3;
+}
+
+.form-textarea {
+    @apply w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition;
+}
+
+/* Input Icons */
+.input-icon-left {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
+}
+
+.input-prefix {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm;
+}
+
+/* Form Hints */
+.form-hint {
+    @apply mt-2 text-xs text-gray-500;
+}
+
+/* Form Errors */
+.form-error {
+    @apply mt-2 text-sm text-red-600;
+}
+
+/* Success Messages */
+.alert-success {
+    @apply mb-6 rounded-xl bg-green-50 p-4 ring-1 ring-green-200;
+}
+
+.alert-success-content {
+    @apply flex items-center gap-3;
+}
+
+.alert-success-icon {
+    @apply h-5 w-5 text-green-400;
+}
+
+.alert-success-text {
+    @apply text-sm font-medium text-green-800;
+}
+
+/* Portfolio Preview Box */
+.portfolio-preview {
+    @apply mt-6 p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-100;
+}
+
+.portfolio-preview-content {
+    @apply flex items-start gap-3;
+}
+
+.portfolio-preview-icon {
+    @apply w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0;
+}
+
+.portfolio-preview-icon svg {
+    @apply w-5 h-5 text-indigo-600;
+}
+
+.portfolio-preview-label {
+    @apply text-sm font-medium text-indigo-900 mb-1;
+}
+
+.portfolio-preview-url {
+    @apply text-sm text-indigo-700 font-mono break-all;
+}
+
+/* Action Buttons Bar */
+.form-actions {
+    @apply flex flex-col sm:flex-row items-center justify-between gap-4 bg-white shadow-sm rounded-2xl p-6 ring-1 ring-gray-200;
+}
+
+.btn-back {
+    @apply inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition;
+}
+
+.btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition shadow-sm;
+}
+
+.btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition;
+}

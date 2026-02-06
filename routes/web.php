@@ -9,9 +9,11 @@ use App\Http\Controllers\Cosplayer\CosplayerDashboardController;
 use App\Http\Controllers\Cosplayer\PhotoController;
 use App\Http\Controllers\Public\PublicAlbumController;
 use App\Http\Controllers\Public\AlbumPublicController;
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\HomeController;
+
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 Route::get('/dashboard', function () {
     $role = auth()->user()->role;

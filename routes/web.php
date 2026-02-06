@@ -8,6 +8,7 @@ use App\Http\Controllers\Fotografo\ProfileController;
 use App\Http\Controllers\Cosplayer\CosplayerDashboardController;
 use App\Http\Controllers\Cosplayer\PhotoController;
 use App\Http\Controllers\Public\PublicAlbumController;
+use App\Http\Controllers\Public\AlbumPublicController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -42,6 +43,8 @@ Route::middleware(['auth', 'role:fotografo'])
         Route::get('/albums/{album}/edit', [AlbumController::class, 'edit'])->name('albums.edit');
         Route::put('/albums/{album}', [AlbumController::class, 'update'])->name('albums.update');
         Route::delete('/albums/{album}', [AlbumController::class, 'destroy'])->name('albums.destroy');
+
+        
     });
 
 /**
@@ -66,11 +69,10 @@ Route::middleware(['auth', 'role:cosplayer'])
 
 Route::get('/fotografos', [FotografoController::class, 'index'])->name('fotografos.index');
 Route::get('/fotografos/{user}', [FotografoController::class, 'show'])->name('fotografos.show');
+Route::get('/albumes', [AlbumPublicController::class, 'index'])->name('albumes.index');
+Route::get('/albumes', [AlbumPublicController::class, 'index'])->name('albumes.index');
+Route::get('/albumes/{album}', [AlbumPublicController::class, 'show'])->name('albumes.show');
 
-Route::get('/albums/public', [PublicAlbumController::class, 'index'])->name('albums.public');
-
-
-
-
+Route::get('/@{username}', [App\Http\Controllers\Public\PortfolioController::class, 'show'])->name('portfolio.show');
 
 require __DIR__.'/auth.php';

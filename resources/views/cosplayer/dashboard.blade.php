@@ -45,7 +45,8 @@
                 <div class="card p-5">
                     <p class="text-sm text-gray-500">Fotos subidas</p>
                     <p class="text-3xl font-semibold text-gray-900 mt-2">{{ $photosCount ?? 0 }}</p>
-                    <a href="{{ route('cosplayer.photos.index') }}" class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
+                    <a href="{{ route('cosplayer.photos.index') }}"
+                        class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
                         Ver mi galería →
                     </a>
                 </div>
@@ -55,7 +56,8 @@
                     <p class="text-gray-900 mt-2">
                         Explorá fotógrafos y revisá sus álbumes por evento.
                     </p>
-                    <a href="{{ route('fotografos.index') }}" class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
+                    <a href="{{ route('fotografos.index') }}"
+                        class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
                         Explorar fotógrafos →
                     </a>
                 </div>
@@ -65,7 +67,8 @@
                     <p class="text-gray-900 mt-2">
                         Mirá los últimos uploads publicados.
                     </p>
-                    <a href="{{ route('albums.public') }}" class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
+                    <a href="{{ route('albumes.index') }}"
+                        class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
                         Ver álbumes recientes →
                     </a>
                 </div>
@@ -81,7 +84,7 @@
                         </a>
                     </div>
 
-                    @if(empty($latestPhotos) || $latestPhotos->isEmpty())
+                    @if (empty($latestPhotos) || $latestPhotos->isEmpty())
                         <div class="mt-4 rounded-lg bg-gray-50 p-6 ring-1 ring-gray-200">
                             <p class="text-gray-700">
                                 Todavía no subiste fotos. Subí la primera y armamos tu galería.
@@ -93,13 +96,12 @@
                         </div>
                     @else
                         <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            @foreach($latestPhotos as $p)
+                            @foreach ($latestPhotos as $p)
                                 <a href="{{ route('cosplayer.photos.index') }}"
-                                   class="group block overflow-hidden rounded-lg bg-gray-100 ring-1 ring-gray-200">
+                                    class="group block overflow-hidden rounded-lg bg-gray-100 ring-1 ring-gray-200">
                                     <div class="aspect-square">
-                                        <img src="{{ asset('storage/'.$p->path) }}"
-                                             alt="foto"
-                                             class="h-full w-full object-cover transition group-hover:scale-105">
+                                        <img src="{{ asset('storage/' . $p->path) }}" alt="foto"
+                                            class="h-full w-full object-cover transition group-hover:scale-105">
                                     </div>
                                 </a>
                             @endforeach

@@ -18,23 +18,46 @@
 </head>
 @stack('scripts')
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-slate-50">
+<body class="font-sans antialiased min-h-screen flex flex-col">
 
-        @include('layouts.navigation')
+    @include('layouts.navigation')
 
-        <!-- Page Heading -->
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ $header }}
+    <!-- Page Heading -->
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            {{ $header }}
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="flex-1 bg-slate-50">
+        {{ $slot }}
+    </main>
+
+    {{-- Footer con Cafecito --}}
+    {{-- Footer con Cafecito --}}
+    <footer class="bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-center md:text-left">
+                    <p class="text-sm text-gray-600">
+                        © {{ date('Y') }} Sitio Fotógrafos & Cosplayers
+                    </p>
+                </div>
+
+                {{-- Botón oficial de Cafecito --}}
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-600">¿Te gusta el proyecto?</p>
+                    <a href='https://cafecito.app/joamessina' rel='noopener' target='_blank'>
+                        <img srcset='https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x'
+                            src='https://cdn.cafecito.app/imgs/buttons/button_2.png'
+                            alt='Invitame un café en cafecito.app' />
+                    </a>
+                </div>
             </div>
-        </header>
+        </div>
+    </footer>
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-        </main>
-    </div>
 </body>
 
 </html>

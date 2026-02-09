@@ -62,9 +62,14 @@ public function show($username)
         $user->load('cosplayerProfile');
         
         // Fotos del cosplayer
-        $photos = collect(); // Por ahora vacío
+$photos = $user->cosplayerPhotos()
+    ->where('is_public', true)
+    ->latest()
+    ->paginate(12);
 
-        return view('public.portfolio.cosplayer', compact('user', 'photos'));
+$profile = $user->cosplayerProfile;
+
+return view('public.portfolio.cosplayer', compact('user', 'photos', 'profile'));
     }
 
     abort(404, 'Perfil no disponible');

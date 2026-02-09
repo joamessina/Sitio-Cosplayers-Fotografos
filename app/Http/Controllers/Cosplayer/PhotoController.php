@@ -46,7 +46,7 @@ public function index()
             'caption' => $data['caption'] ?? null,
         ]);
 
-        return redirect()->route('cosplayer.photos.index')->with('status', 'Foto subida ✅');
+        return redirect()->route('cosplayer.fotos.index')->with('status', 'Foto subida ✅');
     }
 
     public function destroy(CosplayerPhoto $photo)
@@ -56,6 +56,6 @@ public function index()
         Storage::disk('public')->delete($photo->path);
         $photo->delete();
 
-        return redirect()->route('cosplayer.photos.index')->with('status', 'Foto eliminada ✅');
+        return redirect()->route('cosplayer.fotos.index')->with('status', 'Foto eliminada ✅');
     }
 }

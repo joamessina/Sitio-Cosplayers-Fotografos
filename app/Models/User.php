@@ -68,4 +68,9 @@ public function photographerProfile(): HasOne
     return $this->hasOne(PhotographerProfile::class);
 }
 
+public function cosplayerPhotos()
+{
+    return $this->hasMany(Photo::class);
+}
+
 }

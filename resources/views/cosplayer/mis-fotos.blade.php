@@ -1,0 +1,187 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Mis Fotos
+        </h2>
+    </x-slot>
+
+    <div class="py-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+
+            {{-- Mensaje de éxito --}}
+            @if (session('success'))
+                <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            {{-- Card de Upload Múltiple --}}
+            <div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
+                <h2 class="text-xl font-semibold text-gray-900 mb-2">Subí tus mejores fotos</h2>
+                <p class="text-sm text-gray-600 mb-6">
+                    Esto es tu galería personal (MVP). Después la conectamos con fotógrafos.
+                </p>
+
+                <form action="{{ route('cosplayer.fotos.store') }}" 
+                      method="POST" 
+                      enctype="multipart/form-data"
+                      id="uploadForm">
+                    @csrf
+
+                    {{-- FilePond multi-upload --}}
+                    <div class="mb-6">
+                        <input type="file" 
+                               name="photos[]" 
+                               id="filepond"
+                               multiple 
+                               accept="image/jpeg,image/png,image/jpg,image/webp">
+                    </div>
+
+                    {{-- Descripción opcional (para todas las fotos) --}}
+                    <div class="mb-6">
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                            Descripción (opcional)
+                        </label>
+                        <input type="text" 
+                               name="description" 
+                               id="description"
+                               maxlength="120"
+                               placeholder="Ej: Cosplay de Genshin Impact - Convención 2024"
+                               class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">
+                            Esta descripción se aplicará a todas las fotos que subas (máx. 120 caracteres)
+                        </p>
+                    </div>
+
+                    {{-- Botón submit --}}
+                    <button type="submit" 
+                            id="submitBtn"
+                            class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="submitText">Subir fotos</span>
+                        <span id="submitLoading" class="hidden">Subiendo...</span>
+                    </button>
+                </form>
+            </div>
+
+            {{-- Galería de fotos subidas --}}
+            @if ($photos->isNotEmpty())
+                <div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Mi Galería</h2>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        @foreach ($photos as $photo)
+                            <div class="group relative aspect-square bg-gray-100 rounded-xl overflow-hidden ring-1 ring-gray-200">
+                                <img src="{{ asset('storage/' . $photo->path) }}" 
+                                     alt="{{ $photo->caption ?? 'Foto de cosplay' }}" 
+                                     class="w-full h-full object-cover">
+                                
+                                {{-- Overlay con acciones --}}
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                                    <form action="{{ route('cosplayer.fotos.destroy', $photo) }}" 
+                                          method="POST"
+                                          onsubmit="return confirm('¿Eliminar esta foto?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" 
+                                                class="bg-red-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-700">
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+
+                                @if($photo->caption)
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                                        <p class="text-white text-xs">{{ $photo->caption }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Paginación --}}
+                    @if ($photos->hasPages())
+                        <div class="mt-6">
+                            {{ $photos->links() }}
+                        </div>
+                    @endif
+                </div>
+            @endif
+
+        </div>
+    </div>
+
+    {{-- Scripts de FilePond --}}
+    @push('styles')
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+    <style>
+        .filepond--root {
+            font-family: inherit;
+        }
+        .filepond--panel-root {
+            background-color: #f9fafb;
+            border: 2px dashed #e5e7eb;
+            border-radius: 1rem;
+        }
+        .filepond--drop-label {
+            color: #6b7280;
+        }
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+
+    <script>
+        // Registrar plugins
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize
+        );
+
+        // Configurar FilePond
+        const pond = FilePond.create(document.querySelector('#filepond'), {
+            allowMultiple: true,
+            maxFiles: 10,
+            maxFileSize: '5MB',
+            acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'],
+            labelIdle: 'Arrastrá tus fotos o <span class="filepond--label-action">navegá</span>',
+            labelFileProcessing: 'Subiendo',
+            labelFileProcessingComplete: 'Subida completa',
+            labelTapToCancel: 'click para cancelar',
+            labelTapToRetry: 'click para reintentar',
+            labelTapToUndo: 'click para deshacer',
+            labelButtonRemoveItem: 'Eliminar',
+            labelButtonAbortItemLoad: 'Cancelar',
+            labelButtonRetryItemLoad: 'Reintentar',
+            labelButtonAbortItemProcessing: 'Cancelar',
+            labelButtonUndoItemProcessing: 'Deshacer',
+            labelButtonRetryItemProcessing: 'Reintentar',
+            labelButtonProcessItem: 'Subir',
+            labelMaxFileSizeExceeded: 'Archivo muy grande',
+            labelMaxFileSize: 'Tamaño máximo: {filesize}',
+            labelFileTypeNotAllowed: 'Tipo de archivo no válido',
+            fileValidateTypeLabelExpectedTypes: 'Se esperan imágenes JPG, PNG o WEBP',
+        });
+
+        // Manejar submit
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            const files = pond.getFiles();
+            if (files.length === 0) {
+                e.preventDefault();
+                alert('Seleccioná al menos una foto');
+                return;
+            }
+
+            // Mostrar loading
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitText').classList.add('hidden');
+            document.getElementById('submitLoading').classList.remove('hidden');
+        });
+    </script>
+    @endpush
+</x-app-layout>

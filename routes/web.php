@@ -7,9 +7,11 @@ use App\Http\Controllers\Fotografo\AlbumController;
 use App\Http\Controllers\Fotografo\ProfileController;
 use App\Http\Controllers\Cosplayer\CosplayerDashboardController;
 use App\Http\Controllers\Cosplayer\PhotoController;
+use App\Http\Controllers\Cosplayer\CosplayerProfileController;
 use App\Http\Controllers\Public\PublicAlbumController;
 use App\Http\Controllers\Public\AlbumPublicController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Public\PortfolioController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -59,9 +61,14 @@ Route::middleware(['auth', 'role:cosplayer'])
         Route::get('/dashboard', [CosplayerDashboardController::class, 'index'])->name('dashboard');
 
         // Fotos cosplayer (MVP: sube a storage local)
-        Route::get('/mis-fotos', [PhotoController::class, 'index'])->name('photos.index');
-        Route::post('/mis-fotos', [PhotoController::class, 'store'])->name('photos.store');
-        Route::delete('/mis-fotos/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
+        Route::get('/mis-fotos', [\App\Http\Controllers\Cosplayer\MisFotosController::class, 'index'])->name('fotos.index');
+        Route::post('/mis-fotos', [\App\Http\Controllers\Cosplayer\MisFotosController::class, 'store'])->name('fotos.store');
+        Route::delete('/mis-fotos/{photo}', [\App\Http\Controllers\Cosplayer\MisFotosController::class, 'destroy'])->name('fotos.destroy');
+
+        // Perfil cosplayer
+        Route::get('/perfil', [CosplayerProfileController::class, 'edit'])->name('perfil.edit');
+        Route::post('/perfil', [CosplayerProfileController::class, 'update'])->name('perfil.update');
+        Route::post('/perfil/fotos', [CosplayerProfileController::class, 'updatePhotos'])->name('perfil.updatePhotos');
     });
 
 /**
@@ -75,6 +82,6 @@ Route::get('/albumes', [AlbumPublicController::class, 'index'])->name('albumes.i
 Route::get('/albumes', [AlbumPublicController::class, 'index'])->name('albumes.index');
 Route::get('/albumes/{album}', [AlbumPublicController::class, 'show'])->name('albumes.show');
 
-Route::get('/@{username}', [App\Http\Controllers\Public\PortfolioController::class, 'show'])->name('portfolio.show');
+Route::get('/@{username}', [PortfolioController::class, 'show'])->name('portfolio.show');
 
 require __DIR__.'/auth.php';

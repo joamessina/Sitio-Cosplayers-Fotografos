@@ -1,4 +1,7 @@
 <x-app-layout>
+    @php
+        $user = auth()->user();
+    @endphp
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -9,12 +12,27 @@
             </div>
 
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('cosplayer.photos.index') }}" class="btn-primary">
+                <a href="{{ route('cosplayer.fotos.index') }}" class="btn-primary">
                     Subir / ver mis fotos
+                </a>
+
+                <a href="{{ route('cosplayer.perfil.edit') }}" class="btn-secondary">
+                    Personalizar portfolio
                 </a>
 
                 <a href="{{ route('fotografos.index') }}" class="btn-secondary">
                     Explorar fotógrafos
+                </a>
+                <a href="{{ route('portfolio.show', $user->cosplayerProfile->instagram ?? Str::before($user->email, '@')) }}"
+                    target="_blank" class="btn-secondary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                        </path>
+                    </svg>
+                    Ver perfil público
                 </a>
             </div>
         </div>
@@ -34,7 +52,7 @@
                         </p>
                     </div>
 
-                    <a href="{{ route('cosplayer.photos.index') }}" class="btn-secondary">
+                    <a href="{{ route('cosplayer.fotos.index') }}" class="btn-secondary">
                         Subir mi primera foto
                     </a>
                 </div>
@@ -45,7 +63,7 @@
                 <div class="card p-5">
                     <p class="text-sm text-gray-500">Fotos subidas</p>
                     <p class="text-3xl font-semibold text-gray-900 mt-2">{{ $photosCount ?? 0 }}</p>
-                    <a href="{{ route('cosplayer.photos.index') }}"
+                    <a href="{{ route('cosplayer.fotos.index') }}"
                         class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
                         Ver mi galería →
                     </a>
@@ -79,7 +97,7 @@
                 <div class="lg:col-span-2 card">
                     <div class="flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900">Últimas fotos subidas</h3>
-                        <a href="{{ route('cosplayer.photos.index') }}" class="text-sm text-indigo-600 hover:underline">
+                        <a href="{{ route('cosplayer.fotos.index') }}" class="text-sm text-indigo-600 hover:underline">
                             Administrar
                         </a>
                     </div>
@@ -90,14 +108,14 @@
                                 Todavía no subiste fotos. Subí la primera y armamos tu galería.
                             </p>
 
-                            <a href="{{ route('cosplayer.photos.index') }}" class="btn-primary mt-4">
+                            <a href="{{ route('cosplayer.fotos.index') }}" class="btn-primary mt-4">
                                 Subir foto
                             </a>
                         </div>
                     @else
                         <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
                             @foreach ($latestPhotos as $p)
-                                <a href="{{ route('cosplayer.photos.index') }}"
+                                <a href="{{ route('cosplayer.fotos.index') }}"
                                     class="group block overflow-hidden rounded-lg bg-gray-100 ring-1 ring-gray-200">
                                     <div class="aspect-square">
                                         <img src="{{ asset('storage/' . $p->path) }}" alt="foto"

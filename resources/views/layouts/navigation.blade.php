@@ -55,8 +55,11 @@
                                         <x-dropdown-link :href="route('cosplayer.dashboard')">
                                             📊 Panel
                                         </x-dropdown-link>
-                                        <x-dropdown-link :href="route('cosplayer.photos.index')">
+                                        <x-dropdown-link :href="route('cosplayer.fotos.index')">
                                             📸 Mis fotos
+                                        </x-dropdown-link>
+                                        <x-dropdown-link :href="route('cosplayer.perfil.edit')">
+                                            👤 Mi perfil
                                         </x-dropdown-link>
                                     @endif
                                 </x-slot>
@@ -179,8 +182,12 @@
                         📊 Panel
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link :href="route('cosplayer.photos.index')" :active="request()->routeIs('cosplayer.photos.*')">
+                    <x-responsive-nav-link :href="route('cosplayer.fotos.index')" :active="request()->routeIs('cosplayer.fotos.*')">
                         📸 Mis fotos
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('cosplayer.perfil.edit')" :active="request()->routeIs('cosplayer.perfil.*')">
+                        👤 Mi perfil
                     </x-responsive-nav-link>
                 @endif
             </div>

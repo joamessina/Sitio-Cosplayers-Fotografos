@@ -23,6 +23,10 @@
                 <a href="{{ route('fotografos.index') }}" class="btn-secondary">
                     Explorar fotógrafos
                 </a>
+
+                <a href="{{ route('cosplayer.favoritos.index') }}" class="btn-secondary">
+                    ❤️ Mis favoritos
+                </a>
                 <a href="{{ route('portfolio.show', $user->cosplayerProfile->instagram ?? Str::before($user->email, '@')) }}"
                     target="_blank" class="btn-secondary">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

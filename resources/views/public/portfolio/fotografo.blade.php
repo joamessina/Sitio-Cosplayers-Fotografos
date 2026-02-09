@@ -1,4 +1,26 @@
 <x-app-layout>
+    {{-- Variables CSS dinámicas para colores del portfolio --}}
+    @push('styles')
+    <style>
+        :root {
+            --portfolio-primary: {{ $user->photographerProfile->primary_color ?? '#6366f1' }};
+            --portfolio-secondary: {{ $user->photographerProfile->secondary_color ?? '#a855f7' }};
+        }
+        .portfolio-gradient {
+            background: linear-gradient(135deg, var(--portfolio-primary), var(--portfolio-secondary));
+        }
+        .portfolio-primary-bg {
+            background-color: var(--portfolio-primary);
+        }
+        .portfolio-primary-text {
+            color: var(--portfolio-primary);
+        }
+        .portfolio-primary-border {
+            border-color: var(--portfolio-primary);
+        }
+    </style>
+    @endpush
+
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('fotografos.index') }}" class="text-gray-600 hover:text-gray-900">
@@ -16,7 +38,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
             {{-- Hero Section --}}
-            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-8 md:p-12 text-white shadow-xl">
+            <div class="portfolio-gradient rounded-3xl p-8 md:p-12 text-white shadow-xl">
                 <div class="flex flex-col md:flex-row items-center gap-8">
 
                     {{-- Avatar --}}
@@ -105,7 +127,7 @@
                         </div>
 
                         <a href="{{ route('fotografos.show', $user) }}"
-                            class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium">
+                            class="inline-flex items-center gap-2 portfolio-primary-text hover:opacity-80 font-medium">
                             Ver todos
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
@@ -117,16 +139,16 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($albums as $album)
                             <a href="{{ route('albumes.show', $album) }}"
-                                class="group bg-white rounded-xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-lg hover:ring-indigo-300 transition">
+                                class="group bg-white rounded-xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-lg portfolio-primary-border hover:ring-2 transition">
 
                                 {{-- Placeholder de imagen --}}
                                 <div
-                                    class="aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center overflow-hidden">
+                                    class="aspect-video portfolio-gradient opacity-20 flex items-center justify-center overflow-hidden">
                                     @if ($album->thumbnail)
                                         <img src="{{ asset('storage/' . $album->thumbnail) }}"
                                             alt="{{ $album->title }}" class="w-full h-full object-cover">
                                     @else
-                                        <svg class="w-16 h-16 text-indigo-300" fill="none" stroke="currentColor"
+                                        <svg class="w-16 h-16 portfolio-primary-text opacity-50" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -137,7 +159,7 @@
 
                                 <div class="p-5">
                                     <h3
-                                        class="font-semibold text-gray-900 group-hover:text-indigo-600 mb-2 line-clamp-1">
+                                        class="font-semibold text-gray-900 group-hover:opacity-80 portfolio-primary-text mb-2 line-clamp-1">
                                         {{ $album->title }}
                                     </h3>
 
@@ -200,7 +222,7 @@
                 <h3 class="text-xl font-bold text-gray-900 mb-2">¿Te gusta este portfolio?</h3>
                 <p class="text-gray-600 mb-6">Explorá más fotógrafos y sus trabajos</p>
                 <a href="{{ route('fotografos.index') }}"
-                    class="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition font-medium">
+                    class="inline-flex items-center gap-2 portfolio-primary-bg text-white px-6 py-3 rounded-lg hover:opacity-90 transition font-medium">
                     Ver todos los fotógrafos
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">

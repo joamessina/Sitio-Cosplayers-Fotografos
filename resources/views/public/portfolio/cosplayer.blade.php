@@ -1,4 +1,26 @@
 <x-app-layout>
+    {{-- Variables CSS dinámicas para colores del portfolio --}}
+    @push('styles')
+    <style>
+        :root {
+            --portfolio-primary: {{ $user->cosplayerProfile->primary_color ?? '#6366f1' }};
+            --portfolio-secondary: {{ $user->cosplayerProfile->secondary_color ?? '#a855f7' }};
+        }
+        .portfolio-gradient {
+            background: linear-gradient(135deg, var(--portfolio-primary), var(--portfolio-secondary));
+        }
+        .portfolio-primary-bg {
+            background-color: var(--portfolio-primary);
+        }
+        .portfolio-primary-text {
+            color: var(--portfolio-primary);
+        }
+        .portfolio-primary-border {
+            border-color: var(--portfolio-primary);
+        }
+    </style>
+    @endpush
+
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('home') }}" class="text-gray-600 hover:text-gray-900">
@@ -16,7 +38,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
             {{-- Hero Section --}}
-            <div class="bg-gradient-to-r from-purple-500 to-pink-600 rounded-3xl p-8 md:p-12 text-white shadow-xl">
+            <div class="portfolio-gradient rounded-3xl p-8 md:p-12 text-white shadow-xl">
                 <div class="flex flex-col md:flex-row items-center gap-8">
 
                     {{-- Avatar --}}

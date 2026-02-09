@@ -18,6 +18,8 @@ class PhotographerProfile extends Model
         'instagram',
         'portfolio_url',
         'location',
+        'primary_color',
+        'secondary_color',
     ];
 
     public function user(): BelongsTo

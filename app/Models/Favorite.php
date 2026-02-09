@@ -2,28 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CosplayerProfile extends Model
+class Favorite extends Model
 {
-    use HasFactory;
-
-
     protected $fillable = [
         'user_id',
-        'display_name',
-        'bio',
-        'instagram',
-        'portfolio_url',
-        'location',
-        'primary_color',
-        'secondary_color',
+        'album_id',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function album(): BelongsTo
+    {
+        return $this->belongsTo(Album::class);
     }
 }

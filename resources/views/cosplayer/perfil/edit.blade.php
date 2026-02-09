@@ -170,6 +170,111 @@
                                 </div>
                             </div>
                         </div>
+                    {{-- Nueva sección: Personalización --}}
+                    <div class="profile-card">
+                        <div class="profile-section-header">
+                            <div class="profile-section-icon profile-section-icon--purple">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 21h10a2 2 0 002-2v-4a2 2 0 00-2-2H7M7 21V9a2 2 0 012-2h10M9 5v10"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="profile-section-title">Personalización</h3>
+                                <p class="profile-section-subtitle">Colores de tu portfolio</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {{-- Color primario --}}
+                            <div>
+                                <label for="primary_color" class="form-label form-label-required">Color primario</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" name="primary_color" id="primary_color"
+                                        value="{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}"
+                                        class="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer">
+                                    <div class="flex-1">
+                                        <input type="text"
+                                            value="{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}"
+                                            class="form-input text-sm font-mono"
+                                            readonly
+                                            x-data="{}"
+                                            x-ref="colorText1"
+                                            @input="$el.parentNode.previousElementSibling.value = $el.value">
+                                    </div>
+                                </div>
+                                <p class="form-hint">Color principal de tu portfolio (botones, enlaces)</p>
+                                @error('primary_color')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Color secundario --}}
+                            <div>
+                                <label for="secondary_color" class="form-label form-label-required">Color secundario</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" name="secondary_color" id="secondary_color"
+                                        value="{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}"
+                                        class="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer">
+                                    <div class="flex-1">
+                                        <input type="text"
+                                            value="{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}"
+                                            class="form-input text-sm font-mono"
+                                            readonly
+                                            x-data="{}"
+                                            x-ref="colorText2">
+                                    </div>
+                                </div>
+                                <p class="form-hint">Color para acentos y gradientes</p>
+                                @error('secondary_color')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Preview de colores --}}
+                        <div class="mt-4 p-4 rounded-lg border border-gray-200 bg-gray-50">
+                            <p class="text-sm font-medium text-gray-700 mb-3">Vista previa:</p>
+                            <div x-data="{
+                                primaryColor: '{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}',
+                                secondaryColor: '{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}'
+                            }"
+                                x-init="
+                                    $watch('primaryColor', value => {
+                                        $refs.colorText1.value = value;
+                                        document.querySelector('#primary_color').value = value;
+                                    });
+                                    $watch('secondaryColor', value => {
+                                        $refs.colorText2.value = value;
+                                        document.querySelector('#secondary_color').value = value;
+                                    });
+                                    // Sync color inputs with text inputs
+                                    document.querySelector('#primary_color').addEventListener('input', (e) => {
+                                        primaryColor = e.target.value;
+                                    });
+                                    document.querySelector('#secondary_color').addEventListener('input', (e) => {
+                                        secondaryColor = e.target.value;
+                                    });
+                                "
+                                class="flex flex-wrap gap-3">
+
+                                <button type="button"
+                                    :style="`background-color: ${primaryColor}; color: white;`"
+                                    class="px-4 py-2 rounded-lg text-sm font-medium">
+                                    Botón primario
+                                </button>
+
+                                <div class="flex items-center gap-2">
+                                    <span :style="`background: linear-gradient(135deg, ${primaryColor}, ${secondaryColor});`"
+                                        class="w-8 h-8 rounded-lg"></span>
+                                    <span class="text-sm text-gray-600">Gradiente</span>
+                                </div>
+
+                                <span :style="`color: ${primaryColor};`" class="text-sm font-medium">
+                                    Enlace de ejemplo
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

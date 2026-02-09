@@ -12,9 +12,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Filtros --}}
-            <div class="bg-white shadow-sm rounded-2xl p-6 ring-1 ring-gray-200 mb-6">
+            <div x-data="{ showAdvanced: {{ request()->hasAny(['buscar', 'fecha_exacta', 'fecha_desde', 'fecha_hasta', 'orden']) && !in_array(request('orden'), ['', 'recientes']) ? 'true' : 'false' }} }"
+                 class="bg-white shadow-sm rounded-2xl p-6 ring-1 ring-gray-200 mb-6">
                 <form method="GET" action="{{ route('albumes.index') }}" class="space-y-4">
 
+                    {{-- Filtros básicos --}}
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                         {{-- Filtro por fotógrafo --}}
@@ -55,6 +57,78 @@
                         </div>
                     </div>
 
+                    {{-- Toggle para filtros avanzados --}}
+                    <div class="border-t pt-4">
+                        <button type="button" @click="showAdvanced = !showAdvanced"
+                            class="inline-flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-medium">
+                            <svg class="w-4 h-4 transition-transform" :class="showAdvanced ? 'rotate-180' : ''"
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                            <span x-text="showAdvanced ? 'Ocultar filtros avanzados' : 'Mostrar filtros avanzados'"></span>
+                        </button>
+                    </div>
+
+                    {{-- Filtros avanzados --}}
+                    <div x-show="showAdvanced" x-transition class="border-t pt-4 space-y-4">
+
+                        {{-- Búsqueda por texto --}}
+                        <div>
+                            <label for="buscar" class="block text-sm font-medium text-gray-700 mb-2">
+                                Búsqueda por texto
+                            </label>
+                            <input type="text" name="buscar" id="buscar" value="{{ request('buscar') }}"
+                                placeholder="Buscar en títulos, descripciones y eventos..."
+                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                            <p class="text-xs text-gray-500 mt-1">Busca en títulos, descripciones y nombres de eventos</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                            {{-- Fecha exacta --}}
+                            <div>
+                                <label for="fecha_exacta" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Fecha exacta del evento
+                                </label>
+                                <input type="date" name="fecha_exacta" id="fecha_exacta" value="{{ request('fecha_exacta') }}"
+                                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+
+                            {{-- Fecha desde --}}
+                            <div>
+                                <label for="fecha_desde" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Desde fecha
+                                </label>
+                                <input type="date" name="fecha_desde" id="fecha_desde" value="{{ request('fecha_desde') }}"
+                                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+
+                            {{-- Fecha hasta --}}
+                            <div>
+                                <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Hasta fecha
+                                </label>
+                                <input type="date" name="fecha_hasta" id="fecha_hasta" value="{{ request('fecha_hasta') }}"
+                                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                        </div>
+
+                        {{-- Ordenamiento --}}
+                        <div>
+                            <label for="orden" class="block text-sm font-medium text-gray-700 mb-2">
+                                Ordenar por
+                            </label>
+                            <select name="orden" id="orden"
+                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="recientes" {{ request('orden') === 'recientes' ? 'selected' : '' }}>Más recientes</option>
+                                <option value="antiguos" {{ request('orden') === 'antiguos' ? 'selected' : '' }}>Más antiguos</option>
+                                <option value="evento_az" {{ request('orden') === 'evento_az' ? 'selected' : '' }}>Evento A-Z</option>
+                                <option value="evento_za" {{ request('orden') === 'evento_za' ? 'selected' : '' }}>Evento Z-A</option>
+                                <option value="fecha_evento" {{ request('orden') === 'fecha_evento' ? 'selected' : '' }}>Fecha del evento</option>
+                            </select>
+                        </div>
+                    </div>
+
                     {{-- Botones --}}
                     <div class="flex items-center gap-3">
                         <button type="submit"
@@ -62,7 +136,7 @@
                             Buscar
                         </button>
 
-                        @if (request()->hasAny(['fotografo', 'evento', 'ubicacion']))
+                        @if (request()->hasAny(['fotografo', 'evento', 'ubicacion', 'buscar', 'fecha_exacta', 'fecha_desde', 'fecha_hasta', 'orden']))
                             <a href="{{ route('albumes.index') }}"
                                 class="rounded-lg border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50 font-medium">
                                 Limpiar filtros
@@ -83,14 +157,14 @@
                         </path>
                     </svg>
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                        @if (request()->hasAny(['fotografo', 'evento', 'ubicacion']))
+                        @if (request()->hasAny(['fotografo', 'evento', 'ubicacion', 'buscar', 'fecha_exacta', 'fecha_desde', 'fecha_hasta']))
                             No se encontraron álbumes con esos filtros
                         @else
                             Todavía no hay álbumes públicos
                         @endif
                     </h3>
                     <p class="text-gray-600">
-                        @if (request()->hasAny(['fotografo', 'evento', 'ubicacion']))
+                        @if (request()->hasAny(['fotografo', 'evento', 'ubicacion', 'buscar', 'fecha_exacta', 'fecha_desde', 'fecha_hasta']))
                             Probá ajustando los filtros de búsqueda.
                         @else
                             Los álbumes públicos de los fotógrafos aparecerán aquí.
@@ -188,6 +262,20 @@
                                         Ver álbum
                                     </a>
 
+                                    {{-- Botón de favorito (solo para cosplayers loggeados) --}}
+                                    @if (auth()->check() && auth()->user()->role === 'cosplayer')
+                                        <button
+                                            onclick="toggleFavorite({{ $album->id }}, this)"
+                                            data-favorited="{{ $album->is_favorited_by_user ? 'true' : 'false' }}"
+                                            class="favorite-btn inline-flex items-center justify-center p-2 border-2 rounded-lg transition {{ $album->is_favorited_by_user ? 'border-red-300 text-red-600 bg-red-50' : 'border-gray-300 text-gray-700 hover:bg-gray-50' }}"
+                                            title="{{ $album->is_favorited_by_user ? 'Quitar de favoritos' : 'Agregar a favoritos' }}">
+                                            <svg class="w-5 h-5" fill="{{ $album->is_favorited_by_user ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                            </svg>
+                                        </button>
+                                    @endif
+
                                     @if ($album->drive_url)
                                         <a href="{{ $album->drive_url }}" target="_blank" rel="noopener noreferrer"
                                             class="inline-flex items-center justify-center p-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
@@ -214,4 +302,75 @@
 
         </div>
     </div>
+
+    @if (auth()->check() && auth()->user()->role === 'cosplayer')
+    @push('scripts')
+    <script>
+        async function toggleFavorite(albumId, button) {
+            const isFavorited = button.dataset.favorited === 'true';
+            const method = isFavorited ? 'DELETE' : 'POST';
+
+            // Cambio visual inmediato
+            button.disabled = true;
+
+            try {
+                const response = await fetch(`/albums/${albumId}/favorite`, {
+                    method: method,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Actualizar el estado visual del botón
+                    if (data.action === 'added') {
+                        button.dataset.favorited = 'true';
+                        button.classList.remove('border-gray-300', 'text-gray-700', 'hover:bg-gray-50');
+                        button.classList.add('border-red-300', 'text-red-600', 'bg-red-50');
+                        button.querySelector('svg').setAttribute('fill', 'currentColor');
+                        button.title = 'Quitar de favoritos';
+                    } else if (data.action === 'removed') {
+                        button.dataset.favorited = 'false';
+                        button.classList.remove('border-red-300', 'text-red-600', 'bg-red-50');
+                        button.classList.add('border-gray-300', 'text-gray-700', 'hover:bg-gray-50');
+                        button.querySelector('svg').setAttribute('fill', 'none');
+                        button.title = 'Agregar a favoritos';
+                    }
+
+                    // Mostrar mensaje temporal
+                    showMessage(data.message);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error al actualizar favoritos', 'error');
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        function showMessage(message, type = 'success') {
+            // Crear elemento de notificación temporal
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transition-all transform translate-x-full ${type === 'error' ? 'bg-red-50 text-red-800 border border-red-200' : 'bg-green-50 text-green-800 border border-green-200'}`;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            // Animar entrada
+            setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+
+            // Eliminar después de 3 segundos
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+    </script>
+    @endpush
+    @endif
 </x-app-layout>

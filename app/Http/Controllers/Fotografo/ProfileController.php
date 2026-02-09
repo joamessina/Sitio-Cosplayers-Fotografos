@@ -11,10 +11,12 @@ public function edit()
 {
     $user = auth()->user();
     
-    // Si no tiene perfil, crear uno vacío
+    // Si no tiene perfil, crear uno vacío con colores por defecto
     if (!$user->photographerProfile) {
         $user->photographerProfile()->create([
             'display_name' => $user->name,
+            'primary_color' => '#6366f1',
+            'secondary_color' => '#a855f7',
         ]);
         $user->load('photographerProfile');
     }
@@ -32,6 +34,8 @@ public function edit()
             'instagram' => ['nullable', 'string', 'max:100'],
             'portfolio_url' => ['nullable', 'url', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
+            'primary_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'secondary_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ], [
             'display_name.required' => 'El nombre a mostrar es obligatorio.',
             'display_name.max' => 'El nombre no puede superar los 255 caracteres.',
@@ -40,6 +44,10 @@ public function edit()
             'portfolio_url.url' => 'El portfolio debe ser una URL válida.',
             'portfolio_url.max' => 'La URL del portfolio no puede superar los 255 caracteres.',
             'location.max' => 'La ubicación no puede superar los 255 caracteres.',
+            'primary_color.required' => 'El color primario es obligatorio.',
+            'primary_color.regex' => 'El color primario debe ser un código hex válido (ej: #FF0000).',
+            'secondary_color.required' => 'El color secundario es obligatorio.',
+            'secondary_color.regex' => 'El color secundario debe ser un código hex válido (ej: #FF0000).',
         ]);
 
         $user = auth()->user();

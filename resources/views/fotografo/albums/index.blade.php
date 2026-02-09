@@ -141,10 +141,19 @@
                             {{-- Acciones --}}
                             <div
                                 class="border-t border-gray-100 bg-gray-50 px-6 py-3 flex items-center justify-between gap-3">
-                                <a href="{{ route('fotografo.albums.edit', $album) }}"
-                                    class="text-sm text-gray-700 hover:text-gray-900 font-medium">
-                                    Editar
-                                </a>
+                                <div class="flex items-center gap-4">
+                                    <a href="{{ route('fotografo.albums.edit', $album) }}"
+                                        class="text-sm text-gray-700 hover:text-gray-900 font-medium">
+                                        Editar
+                                    </a>
+                                    <a href="{{ route('fotografo.albums.featured.edit', $album) }}"
+                                        class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
+                                        📸 Destacadas
+                                        @if($album->featured_photos_count > 0)
+                                            <span class="inline-block ml-1 px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs">{{ $album->featured_photos_count }}</span>
+                                        @endif
+                                    </a>
+                                </div>
 
                                 <form method="POST" action="{{ route('fotografo.albums.destroy', $album) }}"
                                     onsubmit="return confirm('¿Eliminar este álbum? Esta acción no se puede deshacer.');">

@@ -5,9 +5,11 @@ use App\Http\Controllers\Public\FotografoController;
 use App\Http\Controllers\Fotografo\FotografoDashboardController;
 use App\Http\Controllers\Fotografo\AlbumController;
 use App\Http\Controllers\Fotografo\ProfileController;
+use App\Http\Controllers\Fotografo\FeaturedPhotosController;
 use App\Http\Controllers\Cosplayer\CosplayerDashboardController;
 use App\Http\Controllers\Cosplayer\PhotoController;
 use App\Http\Controllers\Cosplayer\CosplayerProfileController;
+use App\Http\Controllers\Cosplayer\FavoriteController;
 use App\Http\Controllers\Public\PublicAlbumController;
 use App\Http\Controllers\Public\AlbumPublicController;
 use App\Http\Controllers\HomeController;
@@ -48,6 +50,10 @@ Route::middleware(['auth', 'role:fotografo'])
         Route::put('/albums/{album}', [AlbumController::class, 'update'])->name('albums.update');
         Route::delete('/albums/{album}', [AlbumController::class, 'destroy'])->name('albums.destroy');
 
+        // Fotos destacadas
+        Route::get('/albums/{album}/featured', [FeaturedPhotosController::class, 'edit'])->name('albums.featured.edit');
+        Route::post('/albums/{album}/featured', [FeaturedPhotosController::class, 'update'])->name('albums.featured.update');
+
         
     });
 
@@ -69,6 +75,9 @@ Route::middleware(['auth', 'role:cosplayer'])
         Route::get('/perfil', [CosplayerProfileController::class, 'edit'])->name('perfil.edit');
         Route::post('/perfil', [CosplayerProfileController::class, 'update'])->name('perfil.update');
         Route::post('/perfil/fotos', [CosplayerProfileController::class, 'updatePhotos'])->name('perfil.updatePhotos');
+
+        // Favoritos
+        Route::get('/favoritos', [FavoriteController::class, 'index'])->name('favoritos.index');
     });
 
 /**
@@ -83,5 +92,11 @@ Route::get('/albumes', [AlbumPublicController::class, 'index'])->name('albumes.i
 Route::get('/albumes/{album}', [AlbumPublicController::class, 'show'])->name('albumes.show');
 
 Route::get('/@{username}', [PortfolioController::class, 'show'])->name('portfolio.show');
+
+// Rutas para favoritos (solo cosplayers autenticados)
+Route::middleware(['auth', 'role:cosplayer'])->group(function () {
+    Route::post('/albums/{album}/favorite', [FavoriteController::class, 'store'])->name('albums.favorite');
+    Route::delete('/albums/{album}/favorite', [FavoriteController::class, 'destroy'])->name('albums.unfavorite');
+});
 
 require __DIR__.'/auth.php';

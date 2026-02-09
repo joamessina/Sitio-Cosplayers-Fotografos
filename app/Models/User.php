@@ -73,4 +73,14 @@ public function cosplayerPhotos()
     return $this->hasMany(Photo::class);
 }
 
+public function favorites()
+{
+    return $this->hasMany(Favorite::class);
+}
+
+public function favoriteAlbums()
+{
+    return $this->belongsToMany(Album::class, 'favorites')->withTimestamps();
+}
+
 }

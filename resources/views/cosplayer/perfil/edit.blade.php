@@ -13,7 +13,7 @@
                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                     </path>
                 </svg>
-                Ver perfil publico
+                Ver perfil público
             </a>
         </div>
     </x-slot>
@@ -49,7 +49,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="profile-section-title">Informacion publica</h3>
+                                <h3 class="profile-section-title">Información pública</h3>
                                 <p class="profile-section-subtitle">Visible en tu perfil y portfolio</p>
                             </div>
                         </div>
@@ -62,25 +62,25 @@
                             <input type="text" name="display_name" id="display_name"
                                 value="{{ old('display_name', $profile->display_name ?? '') }}" required
                                 class="form-input">
-                            <p class="form-hint">Este es el nombre que veran los demas usuarios</p>
+                            <p class="form-hint">Este es el nombre que verán los demás usuarios</p>
                             @error('display_name')
                                 <p class="form-error">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        {{-- Biografia --}}
+                        {{-- Biografía --}}
                         <div>
-                            <label for="bio" class="form-label">Biografia</label>
+                            <label for="bio" class="form-label">Biografía</label>
                             <textarea name="bio" id="bio" rows="4" maxlength="500" class="form-textarea">{{ old('bio', $profile->bio ?? '') }}</textarea>
-                            <p class="form-hint">Maximo 500 caracteres</p>
+                            <p class="form-hint">Máximo 500 caracteres</p>
                             @error('bio')
                                 <p class="form-error">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        {{-- Ubicacion --}}
+                        {{-- Ubicación --}}
                         <div>
-                            <label for="location" class="form-label">Ubicacion</label>
+                            <label for="location" class="form-label">Ubicación</label>
                             <div class="relative">
                                 <span class="input-icon-left">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,7 +146,7 @@
                                     placeholder="https://tu-portfolio.com"
                                     class="form-input form-input--with-icon-left">
                             </div>
-                            <p class="form-hint">Link a tu portfolio, pagina web o redes</p>
+                            <p class="form-hint">Link a tu portfolio, página web o redes</p>
                             @error('portfolio_url')
                                 <p class="form-error">{{ $message }}</p>
                             @enderror
@@ -170,107 +170,89 @@
                                 </div>
                             </div>
                         </div>
-                    {{-- Nueva sección: Personalización --}}
-                    <div class="profile-card">
-                        <div class="profile-section-header">
-                            <div class="profile-section-icon profile-section-icon--purple">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 21h10a2 2 0 002-2v-4a2 2 0 00-2-2H7M7 21V9a2 2 0 012-2h10M9 5v10"></path>
-                                </svg>
+                    </div>
+                </div>
+
+                {{-- Sección: Personalización de colores --}}
+                <div class="profile-card">
+                    <div class="profile-section-header">
+                        <div class="profile-section-icon profile-section-icon--purple">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 21h10a2 2 0 002-2v-4a2 2 0 00-2-2H7M7 21V9a2 2 0 012-2h10M9 5v10"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="profile-section-title">Personalización</h3>
+                            <p class="profile-section-subtitle">Colores de tu portfolio</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" 
+                        x-data="{
+                            primaryColor: '{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}',
+                            secondaryColor: '{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}'
+                        }">
+                        
+                        {{-- Color primario --}}
+                        <div>
+                            <label for="primary_color" class="form-label form-label-required">Color primario</label>
+                            <div class="flex items-center gap-3">
+                                <input type="color" 
+                                    name="primary_color" 
+                                    id="primary_color"
+                                    x-model="primaryColor"
+                                    class="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer">
+                                <div class="flex-1">
+                                    <input type="text"
+                                        x-model="primaryColor"
+                                        class="form-input text-sm font-mono uppercase">
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="profile-section-title">Personalización</h3>
-                                <p class="profile-section-subtitle">Colores de tu portfolio</p>
-                            </div>
+                            <p class="form-hint">Color principal de tu portfolio (botones, enlaces)</p>
+                            @error('primary_color')
+                                <p class="form-error">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {{-- Color primario --}}
-                            <div>
-                                <label for="primary_color" class="form-label form-label-required">Color primario</label>
-                                <div class="flex items-center gap-3">
-                                    <input type="color" name="primary_color" id="primary_color"
-                                        value="{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}"
-                                        class="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer">
-                                    <div class="flex-1">
-                                        <input type="text"
-                                            value="{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}"
-                                            class="form-input text-sm font-mono"
-                                            readonly
-                                            x-data="{}"
-                                            x-ref="colorText1"
-                                            @input="$el.parentNode.previousElementSibling.value = $el.value">
-                                    </div>
+                        {{-- Color secundario --}}
+                        <div>
+                            <label for="secondary_color" class="form-label form-label-required">Color secundario</label>
+                            <div class="flex items-center gap-3">
+                                <input type="color" 
+                                    name="secondary_color" 
+                                    id="secondary_color"
+                                    x-model="secondaryColor"
+                                    class="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer">
+                                <div class="flex-1">
+                                    <input type="text"
+                                        x-model="secondaryColor"
+                                        class="form-input text-sm font-mono uppercase">
                                 </div>
-                                <p class="form-hint">Color principal de tu portfolio (botones, enlaces)</p>
-                                @error('primary_color')
-                                    <p class="form-error">{{ $message }}</p>
-                                @enderror
                             </div>
-
-                            {{-- Color secundario --}}
-                            <div>
-                                <label for="secondary_color" class="form-label form-label-required">Color secundario</label>
-                                <div class="flex items-center gap-3">
-                                    <input type="color" name="secondary_color" id="secondary_color"
-                                        value="{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}"
-                                        class="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer">
-                                    <div class="flex-1">
-                                        <input type="text"
-                                            value="{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}"
-                                            class="form-input text-sm font-mono"
-                                            readonly
-                                            x-data="{}"
-                                            x-ref="colorText2">
-                                    </div>
-                                </div>
-                                <p class="form-hint">Color para acentos y gradientes</p>
-                                @error('secondary_color')
-                                    <p class="form-error">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            <p class="form-hint">Color para acentos y gradientes</p>
+                            @error('secondary_color')
+                                <p class="form-error">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         {{-- Preview de colores --}}
-                        <div class="mt-4 p-4 rounded-lg border border-gray-200 bg-gray-50">
+                        <div class="md:col-span-2 mt-4 p-4 rounded-lg border border-gray-200 bg-gray-50">
                             <p class="text-sm font-medium text-gray-700 mb-3">Vista previa:</p>
-                            <div x-data="{
-                                primaryColor: '{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}',
-                                secondaryColor: '{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}'
-                            }"
-                                x-init="
-                                    $watch('primaryColor', value => {
-                                        $refs.colorText1.value = value;
-                                        document.querySelector('#primary_color').value = value;
-                                    });
-                                    $watch('secondaryColor', value => {
-                                        $refs.colorText2.value = value;
-                                        document.querySelector('#secondary_color').value = value;
-                                    });
-                                    // Sync color inputs with text inputs
-                                    document.querySelector('#primary_color').addEventListener('input', (e) => {
-                                        primaryColor = e.target.value;
-                                    });
-                                    document.querySelector('#secondary_color').addEventListener('input', (e) => {
-                                        secondaryColor = e.target.value;
-                                    });
-                                "
-                                class="flex flex-wrap gap-3">
-
+                            <div class="flex flex-wrap gap-3 items-center">
                                 <button type="button"
                                     :style="`background-color: ${primaryColor}; color: white;`"
-                                    class="px-4 py-2 rounded-lg text-sm font-medium">
+                                    class="px-4 py-2 rounded-lg text-sm font-medium shadow-sm">
                                     Botón primario
                                 </button>
 
                                 <div class="flex items-center gap-2">
                                     <span :style="`background: linear-gradient(135deg, ${primaryColor}, ${secondaryColor});`"
-                                        class="w-8 h-8 rounded-lg"></span>
+                                        class="w-8 h-8 rounded-lg shadow-sm"></span>
                                     <span class="text-sm text-gray-600">Gradiente</span>
                                 </div>
 
-                                <span :style="`color: ${primaryColor};`" class="text-sm font-medium">
+                                <span :style="`color: ${primaryColor};`" class="text-sm font-medium underline">
                                     Enlace de ejemplo
                                 </span>
                             </div>
@@ -278,20 +260,19 @@
                     </div>
                 </div>
 
-                {{-- Botones perfil --}}
-                <div class="form-actions">
-                    <a href="{{ route('cosplayer.dashboard') }}" class="btn-back">
+                {{-- Botones del formulario --}}
+                <div class="flex items-center justify-between pt-4">
+                    <a href="{{ route('cosplayer.dashboard') }}" class="btn-secondary">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
-                        Volver al dashboard
+                        Volver
                     </a>
 
                     <button type="submit" class="btn-primary">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                         Guardar cambios
                     </button>
@@ -315,29 +296,37 @@
                                 </div>
                                 <div>
                                     <h3 class="profile-section-title">Fotos del portfolio</h3>
-                                    <p class="profile-section-subtitle">Selecciona cuales se muestran en tu perfil publico</p>
+                                    <p class="profile-section-subtitle">Seleccioná cuáles se muestran en tu perfil público</p>
                                 </div>
                             </div>
 
                             <div class="mt-4 flex items-center gap-4 text-sm text-gray-600">
-                                <button type="button" onclick="toggleAll(true)" class="text-indigo-600 hover:underline">Seleccionar todas</button>
+                                <button type="button" onclick="toggleAll(true)" class="text-indigo-600 hover:underline">
+                                    Seleccionar todas
+                                </button>
                                 <span class="text-gray-300">|</span>
-                                <button type="button" onclick="toggleAll(false)" class="text-indigo-600 hover:underline">Deseleccionar todas</button>
-                                <span class="ml-auto" id="photo-counter"></span>
+                                <button type="button" onclick="toggleAll(false)" class="text-indigo-600 hover:underline">
+                                    Deseleccionar todas
+                                </button>
+                                <span class="ml-auto font-medium" id="photo-counter"></span>
                             </div>
 
                             <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                 @foreach($photos as $photo)
                                     <label class="relative cursor-pointer group">
-                                        <input type="checkbox" name="visible_photos[]" value="{{ $photo->id }}"
+                                        <input type="checkbox" 
+                                            name="visible_photos[]" 
+                                            value="{{ $photo->id }}"
                                             class="photo-checkbox sr-only peer"
-                                            {{ $photo->is_public ? 'checked' : '' }}
-                                            onchange="updateCounter()">
+                                            {{ $photo->is_public ? 'checked' : '' }}>
+                                        
                                         <div class="aspect-square rounded-lg overflow-hidden ring-2 ring-transparent peer-checked:ring-indigo-500 peer-checked:ring-offset-2 transition-all">
-                                            <img src="{{ asset('storage/' . $photo->path) }}" alt="{{ $photo->caption ?? 'Foto' }}"
+                                            <img src="{{ asset('storage/' . $photo->path) }}" 
+                                                alt="{{ $photo->caption ?? 'Foto' }}"
                                                 class="h-full w-full object-cover peer-checked:opacity-100 opacity-50 transition-opacity">
                                         </div>
-                                        <div class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white shadow flex items-center justify-center opacity-0 peer-checked:opacity-100 transition-opacity">
+                                        
+                                        <div class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white shadow-md flex items-center justify-center opacity-0 peer-checked:opacity-100 transition-opacity">
                                             <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                             </svg>
@@ -345,18 +334,17 @@
                                     </label>
                                 @endforeach
                             </div>
-                        </div>
 
-                        <div class="form-actions mt-6">
-                            <div></div>
-                            <button type="submit" class="btn-primary">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                                Guardar visibilidad de fotos
-                            </button>
+                            <div class="flex justify-end pt-6 border-t border-gray-200 mt-6">
+                                <button type="submit" class="btn-primary">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                    Guardar visibilidad
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -368,42 +356,27 @@
     @push('scripts')
     <script>
         function toggleAll(state) {
-            document.querySelectorAll('.photo-checkbox').forEach(cb => cb.checked = state);
-            updateStyles();
+            document.querySelectorAll('.photo-checkbox').forEach(cb => {
+                cb.checked = state;
+            });
             updateCounter();
         }
 
         function updateCounter() {
             const total = document.querySelectorAll('.photo-checkbox').length;
             const checked = document.querySelectorAll('.photo-checkbox:checked').length;
-            document.getElementById('photo-counter').textContent = checked + ' de ' + total + ' visibles';
-            updateStyles();
+            document.getElementById('photo-counter').textContent = `${checked} de ${total} visibles`;
         }
 
-        function updateStyles() {
+        // Inicializar contador al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCounter();
+            
+            // Agregar listener a cada checkbox
             document.querySelectorAll('.photo-checkbox').forEach(cb => {
-                const img = cb.closest('label').querySelector('img');
-                const check = cb.closest('label').querySelector('.absolute');
-                const ring = cb.closest('label').querySelector('[class*="ring-2"]');
-                if (cb.checked) {
-                    img.classList.remove('opacity-50');
-                    img.classList.add('opacity-100');
-                    check.classList.remove('opacity-0');
-                    check.classList.add('opacity-100');
-                    ring.classList.remove('ring-transparent');
-                    ring.classList.add('ring-indigo-500', 'ring-offset-2');
-                } else {
-                    img.classList.add('opacity-50');
-                    img.classList.remove('opacity-100');
-                    check.classList.add('opacity-0');
-                    check.classList.remove('opacity-100');
-                    ring.classList.add('ring-transparent');
-                    ring.classList.remove('ring-indigo-500', 'ring-offset-2');
-                }
+                cb.addEventListener('change', updateCounter);
             });
-        }
-
-        document.addEventListener('DOMContentLoaded', updateCounter);
+        });
     </script>
     @endpush
 </x-app-layout>

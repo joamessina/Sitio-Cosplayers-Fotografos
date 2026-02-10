@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <script src="{{ mix('js/app.js') }}" defer></script>
 
+    @stack('styles')
 </head>
-@stack('scripts')
 
 <body class="font-sans antialiased min-h-screen flex flex-col">
 
@@ -58,6 +58,7 @@
         </div>
     </footer>
 
+    @stack('scripts')
 </body>
 
 </html>

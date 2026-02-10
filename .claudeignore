@@ -1,0 +1,42 @@
+# No analizar estas carpetas pesadas
+
+node_modules/
+vendor/
+storage/
+public/build/
+public/hot/
+.git/
+bootstrap/cache/
+\*.log
+
+# Archivos generados
+
+composer.lock
+package-lock.json
+_.min.js
+_.min.css
+
+# Desactivar analisis automatico de archivos
+
+tests/
+.vscode/
+.idea/
+public/mix-manifest.json
+# Archivos de configuración IDE (no necesarios para Claude)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos de deployment (Claude no los necesita)
+.env
+.env.*
+Procfile
+nixpacks.toml
+railway.json
+
+# Assets compilados (son generados, no fuente)
+public/css/
+public/js/
+public/mix-manifest.json

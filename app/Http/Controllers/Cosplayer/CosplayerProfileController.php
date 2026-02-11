@@ -38,7 +38,7 @@ class CosplayerProfileController extends Controller
             'primary_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'secondary_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'avatar' => ['nullable', 'image', 'max:2048'],
-            'cover' => ['nullable', 'image', 'max:5120'],
+            'cover' => ['nullable', 'image', 'max:10240'],
         ], [
             'display_name.required' => 'El nombre a mostrar es obligatorio.',
             'display_name.max' => 'El nombre no puede superar los 255 caracteres.',
@@ -54,7 +54,7 @@ class CosplayerProfileController extends Controller
             'avatar.image' => 'El avatar debe ser una imagen.',
             'avatar.max' => 'El avatar no puede superar los 2MB.',
             'cover.image' => 'La foto de portada debe ser una imagen.',
-            'cover.max' => 'La foto de portada no puede superar los 5MB.',
+            'cover.max' => 'La foto de portada no puede superar los 10MB.',
         ]);
 
         $user = auth()->user();

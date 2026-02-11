@@ -28,12 +28,12 @@ public function index()
     public function store(Request $request)
     {
         $data = $request->validate([
-    'photo' => ['required', 'image', 'max:5120'],
+    'photo' => ['required', 'image', 'max:10240'],
     'caption' => ['nullable', 'string', 'max:120'],
 ], [
     'photo.required' => 'Tenés que seleccionar una foto.',
     'photo.image' => 'El archivo debe ser una imagen válida (JPG/PNG/WebP, etc).',
-    'photo.max' => 'La foto no puede superar los 5MB.',
+    'photo.max' => 'La foto no puede superar los 10MB.',
     'caption.max' => 'La descripción no puede superar los 120 caracteres.',
 ]);
 

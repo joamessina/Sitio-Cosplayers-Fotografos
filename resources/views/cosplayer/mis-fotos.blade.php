@@ -171,7 +171,7 @@
         const pond = FilePond.create(document.querySelector('#filepond'), {
             allowMultiple: true,
             maxFiles: 10,
-            maxFileSize: '10MB',
+            maxFileSize: '5MB',
             acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'],
             labelIdle: 'Arrastrá tus fotos o <span class="filepond--label-action">navegá</span>',
             labelFileProcessing: 'Subiendo',

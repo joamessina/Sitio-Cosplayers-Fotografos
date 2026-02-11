@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Fotografo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Album;
+use App\Helpers\DriveHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,7 +32,11 @@ class AlbumController extends Controller
             'event_date' => ['nullable', 'date'],
             'location' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'drive_url' => ['nullable', 'url', 'max:500'],
+            'drive_url' => ['nullable', 'url', 'max:500', function($attribute, $value, $fail) {
+                if (!empty($value) && !DriveHelper::isDriveUrl($value)) {
+                    $fail('El link debe ser de Google Drive (drive.google.com).');
+                }
+            }],
             'thumbnail' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'is_public' => ['boolean'],
         ], [
@@ -81,7 +86,11 @@ class AlbumController extends Controller
             'event_date' => ['nullable', 'date'],
             'location' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'drive_url' => ['nullable', 'url', 'max:500'],
+            'drive_url' => ['nullable', 'url', 'max:500', function($attribute, $value, $fail) {
+                if (!empty($value) && !DriveHelper::isDriveUrl($value)) {
+                    $fail('El link debe ser de Google Drive (drive.google.com).');
+                }
+            }],
             'thumbnail' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'is_public' => ['boolean'],
         ], [

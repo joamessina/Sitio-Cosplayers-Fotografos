@@ -11,8 +11,9 @@ class FotografoController extends Controller
     {
         $fotografos = User::query()
             ->where('role', 'fotografo')
+            ->with('photographerProfile')
             ->orderBy('name')
-            ->get(['id','name']);
+            ->get();
 
         return view('public.fotografos.index', compact('fotografos'));
     }

@@ -12,6 +12,13 @@
             </div>
 
             <div class="flex flex-wrap gap-2">
+                <button onclick="copyPortfolioUrl()" class="btn-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Copiar URL del portfolio
+                </button>
+
                 <a href="{{ route('cosplayer.fotos.index') }}" class="btn-primary">
                     Subir / ver mis fotos
                 </a>
@@ -27,17 +34,17 @@
                 <a href="{{ route('cosplayer.favoritos.index') }}" class="btn-secondary">
                     ❤️ Mis favoritos
                 </a>
-                <a href="{{ route('portfolio.show', $user->cosplayerProfile->instagram ?? Str::before($user->email, '@')) }}"
-                    target="_blank" class="btn-secondary">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                        </path>
-                    </svg>
-                    Ver perfil público
-                </a>
+<a href="{{ route('portfolio.show', $user->cosplayerProfile?->instagram ?? Str::before($user->email, '@')) }}"
+    target="_blank" class="btn-secondary">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+        </path>
+    </svg>
+    Ver perfil público
+</a>
             </div>
         </div>
     </x-slot>
@@ -151,4 +158,42 @@
 
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        function copyPortfolioUrl() {
+            @php
+                $username = auth()->user()->cosplayerProfile?->instagram
+                    ?? Str::before(auth()->user()->email, '@')
+                    ?? auth()->user()->name;
+            @endphp
+
+            const url = "{{ url('/@' . $username) }}";
+
+            navigator.clipboard.writeText(url).then(() => {
+                showCopyNotification('URL copiada al portapapeles ✓');
+            }).catch(err => {
+                console.error('Error al copiar:', err);
+                showCopyNotification('Error al copiar', 'error');
+            });
+        }
+
+        function showCopyNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transition-all transform translate-x-full ${
+                type === 'error'
+                    ? 'bg-red-50 text-red-800 border border-red-200'
+                    : 'bg-green-50 text-green-800 border border-green-200'
+            }`;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+    </script>
+    @endpush
 </x-app-layout>

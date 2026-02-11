@@ -282,13 +282,9 @@
                                 @enderror
                             </div>
 
-                            <p class="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
-                                El sistema de mensajes estará disponible próximamente.
-                            </p>
-
                             <div class="flex justify-end gap-3 pt-2">
-                                <button type="button" @click="open = false" class="btn-secondary">Cerrar</button>
-                                <button type="submit" disabled class="btn-primary opacity-50 cursor-not-allowed">
+                                <button type="button" @click="open = false" class="btn-secondary">Cancelar</button>
+                                <button type="submit" class="btn-primary">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>

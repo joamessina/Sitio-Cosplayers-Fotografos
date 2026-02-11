@@ -57,7 +57,7 @@ class ContactController extends Controller
         try {
             Mail::to($user->email)->send(new ContactMessageMail($contactMessage));
         } catch (\Exception $e) {
-            // Si mail no está configurado, el mensaje queda en BD igualmente
+            \Log::error('Error enviando email de contacto: ' . $e->getMessage());
         }
 
         return back()->with('contact_sent', 'Tu mensaje fue enviado correctamente.');

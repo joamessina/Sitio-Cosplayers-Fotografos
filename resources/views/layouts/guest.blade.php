@@ -16,8 +16,24 @@
 
     </head>
     <body>
-        <div class="font-sans text-gray-900 antialiased">
-            {{ $slot }}
+        <div class="font-sans text-gray-900 antialiased min-h-screen flex flex-col">
+            <div class="flex-1">
+                {{ $slot }}
+            </div>
+
+            {{-- Footer legal --}}
+            <footer class="bg-gray-50 border-t border-gray-200 mt-auto">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            © {{ date('Y') }} Joaquín Messina. Todos los derechos reservados.
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Este sitio y todo su contenido están protegidos por derechos de autor.
+                        </p>
+                    </div>
+                </div>
+            </footer>
         </div>
     </body>
 </html>

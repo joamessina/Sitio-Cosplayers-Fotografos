@@ -326,17 +326,6 @@
                             </div>
                         @endif
 
-                        @if($errors->has('debug'))
-                            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
-                                {{ $errors->first('debug') }}
-                            </div>
-                        @endif
-
-                        @if($errors->has('mail_error'))
-                            <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
-                                <strong>Error de Mail:</strong> {{ $errors->first('mail_error') }}
-                            </div>
-                        @endif
 
                         <form action="{{ route('contacto.store', $user) }}" method="POST" class="space-y-4">
                             @csrf

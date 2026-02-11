@@ -66,8 +66,6 @@ class ContactController extends Controller
             ]);
         } catch (\Exception $e) {
             \Log::error('Error enviando email de contacto: ' . $e->getMessage());
-            // DEBUG: Mostrar el error real
-            return back()->withInput()->withErrors(['mail_error' => 'Error de mail: ' . $e->getMessage()]);
         }
 
         return back()->with('contact_sent', 'Tu mensaje fue enviado correctamente.');

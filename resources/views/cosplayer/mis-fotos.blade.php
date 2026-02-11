@@ -194,9 +194,10 @@
 
         // Manejar submit
         document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevenir submit normal
+
             const files = pond.getFiles();
             if (files.length === 0) {
-                e.preventDefault();
                 alert('Seleccioná al menos una foto');
                 return;
             }
@@ -205,6 +206,51 @@
             document.getElementById('submitBtn').disabled = true;
             document.getElementById('submitText').classList.add('hidden');
             document.getElementById('submitLoading').classList.remove('hidden');
+
+            // Crear FormData manualmente con los archivos de FilePond
+            const formData = new FormData();
+
+            // Agregar token CSRF
+            formData.append('_token', document.querySelector('input[name="_token"]').value);
+
+            // Agregar descripción si existe
+            const description = document.getElementById('description').value;
+            if (description) {
+                formData.append('description', description);
+            }
+
+            // Agregar archivos de FilePond
+            files.forEach((fileItem, index) => {
+                formData.append('photos[]', fileItem.file);
+            });
+
+            // Enviar via fetch
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (response.redirected) {
+                    // Si es redirect (éxito), redirigir
+                    window.location.href = response.url;
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(`Error ${response.status}: ${text}`);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al subir las fotos: ' + error.message);
+
+                // Restaurar botón
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitText').classList.remove('hidden');
+                document.getElementById('submitLoading').classList.add('hidden');
+            });
         });
 
         // Drag & drop para reordenar fotos

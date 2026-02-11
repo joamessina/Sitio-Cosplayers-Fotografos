@@ -21,30 +21,62 @@ class MisFotosController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'photos' => ['required', 'array', 'min:1', 'max:10'],
-            'photos.*' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'], // 5MB
-            'description' => ['nullable', 'string', 'max:120'], // 120 por el límite de caption
-        ], [
-            'photos.required' => 'Debés seleccionar al menos una foto',
-            'photos.*.image' => 'Todos los archivos deben ser imágenes',
-            'photos.*.mimes' => 'Las imágenes deben ser JPG, PNG o WEBP',
-            'photos.*.max' => 'Cada imagen no puede superar los 5MB',
-            'photos.max' => 'Podés subir hasta 10 fotos a la vez',
-        ]);
+        // DEBUG 1: Inicio del método
+        \Log::info('=== MisFotosController@store iniciado ===');
+        \Log::info('Usuario: ' . auth()->id());
+        \Log::info('Archivos recibidos: ' . count($request->file('photos') ?? []));
+
+        try {
+            $request->validate([
+                'photos' => ['required', 'array', 'min:1', 'max:10'],
+                'photos.*' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'], // 5MB
+                'description' => ['nullable', 'string', 'max:120'], // 120 por el límite de caption
+            ], [
+                'photos.required' => 'Debés seleccionar al menos una foto',
+                'photos.*.image' => 'Todos los archivos deben ser imágenes',
+                'photos.*.mimes' => 'Las imágenes deben ser JPG, PNG o WEBP',
+                'photos.*.max' => 'Cada imagen no puede superar los 5MB',
+                'photos.max' => 'Podés subir hasta 10 fotos a la vez',
+            ]);
+
+            // DEBUG 2: Validación pasada
+            \Log::info('✅ Validación pasada correctamente');
+
+        } catch (\Exception $e) {
+            // DEBUG: Error de validación
+            \Log::error('❌ Error de validación: ' . $e->getMessage());
+            throw $e;
+        }
 
         $uploadedCount = 0;
 
-        foreach ($request->file('photos') as $photo) {
-            $path = $photo->store('cosplayer-photos', 'public');
+        foreach ($request->file('photos') as $index => $photo) {
+            // DEBUG 3: Procesando cada archivo
+            \Log::info("📁 Procesando archivo #{$index}:");
+            \Log::info("  - Nombre: " . $photo->getClientOriginalName());
+            \Log::info("  - Tamaño: " . $photo->getSize() . " bytes");
+            \Log::info("  - Tipo: " . $photo->getMimeType());
 
-            auth()->user()->cosplayerPhotos()->create([
-                'path' => $path,
-                'caption' => $request->description,
-            ]);
+            try {
+                $path = $photo->store('cosplayer-photos', 'public');
+                \Log::info("  ✅ Archivo guardado en: " . $path);
 
-            $uploadedCount++;
+                $photoRecord = auth()->user()->cosplayerPhotos()->create([
+                    'path' => $path,
+                    'caption' => $request->description,
+                ]);
+
+                \Log::info("  ✅ Registro BD creado con ID: " . $photoRecord->id);
+                $uploadedCount++;
+
+            } catch (\Exception $e) {
+                \Log::error("  ❌ Error procesando archivo #{$index}: " . $e->getMessage());
+                throw $e;
+            }
         }
+
+        // DEBUG 4: Final exitoso
+        \Log::info("🎉 Proceso completado. Total subidas: {$uploadedCount}");
 
         return redirect()
             ->route('cosplayer.fotos.index')

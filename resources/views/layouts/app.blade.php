@@ -41,7 +41,10 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="text-center md:text-left">
                     <p class="text-sm text-gray-600">
-                        © {{ date('Y') }} Sitio Fotógrafos & Cosplayers
+                        © {{ date('Y') }} Joaquín Messina. Todos los derechos reservados.
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Este sitio y todo su contenido están protegidos por derechos de autor.
                     </p>
                 </div>
 

@@ -53,9 +53,6 @@ class ContactController extends Controller
 
         RateLimiter::hit($key, 600); // 600 segundos = 10 minutos
 
-        // DEBUG: Forzar mensaje para verificar que llegamos acá
-        return back()->withInput()->withErrors(['debug' => 'DEBUG: El ContactController se ejecutó correctamente. User: ' . $user->email]);
-
         // Enviar email - temporalmente mostrando errores para debug
         try {
             Mail::to($user->email)->send(new ContactMessageMail($contactMessage));

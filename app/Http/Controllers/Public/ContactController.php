@@ -53,11 +53,13 @@ class ContactController extends Controller
 
         RateLimiter::hit($key, 600); // 600 segundos = 10 minutos
 
-        // Enviar email (sin fallar si mail no está configurado)
+        // Enviar email - temporalmente mostrando errores para debug
         try {
             Mail::to($user->email)->send(new ContactMessageMail($contactMessage));
         } catch (\Exception $e) {
             \Log::error('Error enviando email de contacto: ' . $e->getMessage());
+            // DEBUG: Mostrar el error real
+            return back()->withInput()->withErrors(['mail_error' => 'Error de mail: ' . $e->getMessage()]);
         }
 
         return back()->with('contact_sent', 'Tu mensaje fue enviado correctamente.');

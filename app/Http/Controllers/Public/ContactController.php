@@ -61,7 +61,7 @@ class ContactController extends Controller
                 'from' => 'onboarding@resend.dev',
                 'to' => [$user->email],
                 'subject' => 'Nuevo mensaje de contacto: ' . ($contactMessage->subject ?: 'Sin asunto'),
-                'html' => view('emails.contact-message', compact('contactMessage'))->render(),
+                'html' => view('emails.contact-message-simple', compact('contactMessage'))->render(),
                 'reply_to' => $contactMessage->sender_email,
             ]);
         } catch (\Exception $e) {

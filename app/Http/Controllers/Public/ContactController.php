@@ -53,9 +53,17 @@ class ContactController extends Controller
 
         RateLimiter::hit($key, 600); // 600 segundos = 10 minutos
 
-        // Enviar email - temporalmente mostrando errores para debug
+        // Enviar email usando API de Resend directamente
         try {
-            Mail::to($user->email)->send(new ContactMessageMail($contactMessage));
+            $resend = \Resend::client(env('RESEND_API_KEY'));
+
+            $resend->emails->send([
+                'from' => 'onboarding@resend.dev',
+                'to' => [$user->email],
+                'subject' => 'Nuevo mensaje de contacto: ' . ($contactMessage->subject ?: 'Sin asunto'),
+                'html' => view('emails.contact-message', compact('contactMessage'))->render(),
+                'reply_to' => $contactMessage->sender_email,
+            ]);
         } catch (\Exception $e) {
             \Log::error('Error enviando email de contacto: ' . $e->getMessage());
             // DEBUG: Mostrar el error real

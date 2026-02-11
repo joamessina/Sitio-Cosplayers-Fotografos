@@ -91,6 +91,8 @@ Plataforma web para conectar **fotógrafos** y **cosplayers** en Argentina.
 
 - Thumbnails de álbumes: `storage/app/public/albums/`
 - Fotos de cosplayers: `storage/app/public/cosplayer-photos/`
+- Avatares: `storage/app/public/avatars/`
+- Portadas: `storage/app/public/covers/`
 - Assets compilados: `public/build/`
 
 ## Features Completadas ✅
@@ -120,6 +122,17 @@ Plataforma web para conectar **fotógrafos** y **cosplayers** en Argentina.
 16. Paginación en listados públicos
 17. Validaciones en español con mensajes custom
 
+### Quick Wins
+18. **Botón "Copiar URL del portfolio"** (JS puro con Clipboard API + toast notifications en ambos dashboards)
+19. **Ícono de Google Drive + validación del link** (SVG icon en 3 vistas de álbumes + DriveHelper + validación backend)
+20. **Skeleton loading en galerías** (CSS animation pulse + onload fade-in en portfolios y listado de álbumes)
+21. **Reordenar fotos del cosplayer** (SortableJS drag & drop + endpoint AJAX + campo sort_order en BD)
+
+### Alta Prioridad
+22. **Foto de perfil / avatar** (upload de imagen con preview en vivo, storage en `avatars/`, fallback a inicial del nombre en portfolios)
+23. **Foto de portada en portfolio** (imagen de banner en hero section con overlay oscuro, fallback a gradiente, storage en `covers/`)
+24. **Sistema de contacto** (modal Alpine.js en portfolios, tabla `contact_messages`, Mailable con replyTo, rate limiting 3/10min por IP)
+
 ## Pendiente de Implementar 🚧
 
 ### Backlog largo plazo
@@ -129,21 +142,13 @@ Plataforma web para conectar **fotógrafos** y **cosplayers** en Argentina.
 
 ## Próximo a Realizar 🗓️
 
-### Quick Wins (empezar por acá, bajo esfuerzo)
-| # | Feature | Detalle |
-|---|---|---|
-| QW1 | **Botón "Copiar URL del portfolio"** | En el dashboard de ambos roles. JS puro, sin tocar BD |
-| QW2 | **Ícono de Google Drive + validación del link** | Mostrar ícono de Drive en álbumes, validar que el link sea realmente de Drive |
-| QW3 | **Skeleton loading en galerías** | Placeholder animado mientras cargan imágenes en portfolios |
-| QW4 | **Reordenar fotos del cosplayer** | Drag & drop para cambiar el orden de la galería personal |
-
 ### Alta Prioridad (impacto directo en calidad del producto)
 | # | Feature | Detalle |
 |---|---|---|
-| AP1 | **Foto de perfil / avatar** | Upload de imagen para reemplazar la inicial del nombre. Requiere migración + storage |
-| AP2 | **Foto de portada en portfolio** | Imagen de banner en el hero section (además del gradiente). Requiere migración + storage |
+| ~~AP1~~ | ~~**Foto de perfil / avatar**~~ | ✅ COMPLETADO |
+| ~~AP2~~ | ~~**Foto de portada en portfolio**~~ | ✅ COMPLETADO |
 | AP3 | **SEO / Open Graph meta tags** | Preview al compartir `/@username` en redes sociales. Solo vistas, sin tocar BD |
-| AP4 | **Sistema de contacto** | Botón "Contactar" en portfolios que envía un email sin exponer datos. Requiere config de mail |
+| ~~AP4~~ | ~~**Sistema de contacto**~~ | ✅ COMPLETADO |
 
 ### Nice to Have
 | # | Feature | Detalle |
@@ -152,13 +157,11 @@ Plataforma web para conectar **fotógrafos** y **cosplayers** en Argentina.
 | NH2 | **Modo oscuro** | Toggle en la UI que afecta todo el CSS. Persistido con Alpine + localStorage |
 
 ### Orden sugerido de implementación
-1. QW1 → QW2 → QW3 (los más simples, no tocan BD)
-2. QW4 (drag & drop, requiere JS)
+1. ~~QW1 → QW2 → QW3 → QW4~~ ✅ COMPLETADOS
+2. ~~AP1 + AP2 + AP4~~ ✅ COMPLETADOS
 3. AP3 (SEO, solo vistas)
-4. AP1 + AP2 juntos (comparten lógica de upload de imágenes)
-5. AP4 (contacto, requiere configurar mail)
-6. NH1 (muy simple)
-7. NH2 (modo oscuro, el más complejo por impacto en CSS global)
+4. NH1 (muy simple)
+5. NH2 (modo oscuro, el más complejo por impacto en CSS global)
 
 ## Comandos Útiles
 
@@ -226,7 +229,7 @@ php artisan view:clear
 - Búsqueda avanzada (filtros múltiples + ordenamiento)
 - Sistema de favoritos (AJAX con corazón animado)
 
-Total features implementadas: **17/20** (85% del roadmap original completado)
+Total features implementadas: **24/27** (89% del roadmap completado)
 
 **2026-02-09 (sesión de fixes):**
 
@@ -236,6 +239,24 @@ Total features implementadas: **17/20** (85% del roadmap original completado)
 - **Fix UX botones de acción**: los botones "Volver al Dashboard" y "Guardar cambios" tenían una card completa que ocupaba mucho espacio. Se reemplazó por un `flex` compacto con `pt-4`.
 - **Fix portfolio cosplayer**: datos del perfil (ubicación, redes sociales) no se mostraban. La causa raíz era el bug del `@stack('styles')` mencionado arriba.
 - **CLAUDE.md actualizado**: se corrigió el listado de features completadas vs pendientes.
+
+**2026-02-10 (Quick Wins completados):**
+
+*Features implementadas:*
+- **QW3 Skeleton loading**: CSS animation `skeleton-pulse` + clase `.skeleton-img` en `app.css`. Aplicado en 3 vistas: portfolio cosplayer, portfolio fotógrafo y listado público de álbumes. Usa `onload` para fade-in cuando la imagen carga.
+- **QW4 Reordenar fotos cosplayer**: Migración `add_sort_order_to_photos_table` (campo `sort_order` unsigned integer default 0). SortableJS para drag & drop en `mis-fotos.blade.php`. Endpoint `POST cosplayer/mis-fotos/reorder` en `MisFotosController`. Queries actualizadas para ordenar por `sort_order` en `MisFotosController` y `PortfolioController`.
+
+*Nota:* QW1 y QW2 ya estaban implementados correctamente de la sesión anterior. Se verificaron y están OK.
+
+**2026-02-11 (AP1 + AP2 + AP4):**
+
+*Features implementadas:*
+- **AP1 Foto de perfil / avatar**: Migración `add_avatar_and_cover_to_profiles` (campos `avatar_path` nullable en ambas tablas de perfil). Upload con validación (image, max 2MB), preview en vivo con Alpine.js + `URL.createObjectURL`. Storage en `avatars/`. Borrado del anterior al reemplazar. Checkbox "Eliminar avatar" para remover sin reemplazar. Fallback a inicial del nombre en portfolios públicos.
+- **AP2 Foto de portada**: Misma migración (campo `cover_path` nullable). Upload con validación (image, max 5MB). Preview aspect-[3/1] con dashed border. Storage en `covers/`. En portfolios públicos: imagen de fondo con overlay oscuro (`bg-black/50`), fallback al gradiente de colores. Misma lógica de borrado/reemplazo que avatar.
+- **AP4 Sistema de contacto**: Tabla `contact_messages` (recipient_id FK, sender_name, sender_email, subject nullable, message, sender_ip, is_read). Modelo `ContactMessage`. Mailable `ContactMessageMail` (Markdown con replyTo del sender). `ContactController` con rate limiting (3 mensajes/IP cada 10 min via `RateLimiter`). Try/catch en envío de mail. Ruta `POST /contacto/{user}`. Modal Alpine.js en ambos portfolios con animaciones, auto-apertura con errores de validación, y feedback de éxito.
+
+*Archivos nuevos (6):* migración avatar/cover, migración contact_messages, `ContactMessage.php`, `ContactMessageMail.php`, `contact-message.blade.php`, `ContactController.php`
+*Archivos modificados (10):* 2 modelos de perfil, User.php, 2 controllers de perfil, 2 vistas de edición, 2 portfolios públicos, `web.php`
 
 ---
 

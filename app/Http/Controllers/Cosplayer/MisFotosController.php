@@ -12,6 +12,7 @@ class MisFotosController extends Controller
     public function index()
     {
         $photos = auth()->user()->cosplayerPhotos()
+            ->orderBy('sort_order')
             ->latest()
             ->paginate(12);
 
@@ -48,6 +49,24 @@ class MisFotosController extends Controller
         return redirect()
             ->route('cosplayer.fotos.index')
             ->with('success', "¡{$uploadedCount} " . ($uploadedCount === 1 ? 'foto subida' : 'fotos subidas') . " exitosamente!");
+    }
+
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'order' => ['required', 'array'],
+            'order.*' => ['required', 'integer', 'exists:photos,id'],
+        ]);
+
+        $userId = auth()->id();
+
+        foreach ($request->order as $index => $photoId) {
+            Photo::where('id', $photoId)
+                ->where('user_id', $userId)
+                ->update(['sort_order' => $index]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Orden actualizado']);
     }
 
     public function destroy(Photo $photo)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cosplayer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CosplayerProfileController extends Controller
 {
@@ -36,6 +37,8 @@ class CosplayerProfileController extends Controller
             'location' => ['nullable', 'string', 'max:255'],
             'primary_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'secondary_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'avatar' => ['nullable', 'image', 'max:2048'],
+            'cover' => ['nullable', 'image', 'max:5120'],
         ], [
             'display_name.required' => 'El nombre a mostrar es obligatorio.',
             'display_name.max' => 'El nombre no puede superar los 255 caracteres.',
@@ -48,14 +51,48 @@ class CosplayerProfileController extends Controller
             'primary_color.regex' => 'El color primario debe ser un código hex válido (ej: #FF0000).',
             'secondary_color.required' => 'El color secundario es obligatorio.',
             'secondary_color.regex' => 'El color secundario debe ser un código hex válido (ej: #FF0000).',
+            'avatar.image' => 'El avatar debe ser una imagen.',
+            'avatar.max' => 'El avatar no puede superar los 2MB.',
+            'cover.image' => 'La foto de portada debe ser una imagen.',
+            'cover.max' => 'La foto de portada no puede superar los 5MB.',
         ]);
 
         $user = auth()->user();
+        $profile = $user->cosplayerProfile;
 
-        if (!$user->cosplayerProfile) {
-            $user->cosplayerProfile()->create($validated);
+        // Datos del formulario (sin archivos)
+        $data = collect($validated)->except(['avatar', 'cover'])->toArray();
+
+        // Avatar
+        if ($request->hasFile('avatar')) {
+            if ($profile && $profile->avatar_path) {
+                Storage::disk('public')->delete($profile->avatar_path);
+            }
+            $data['avatar_path'] = $request->file('avatar')->store('avatars', 'public');
+        } elseif ($request->boolean('remove_avatar')) {
+            if ($profile && $profile->avatar_path) {
+                Storage::disk('public')->delete($profile->avatar_path);
+            }
+            $data['avatar_path'] = null;
+        }
+
+        // Cover
+        if ($request->hasFile('cover')) {
+            if ($profile && $profile->cover_path) {
+                Storage::disk('public')->delete($profile->cover_path);
+            }
+            $data['cover_path'] = $request->file('cover')->store('covers', 'public');
+        } elseif ($request->boolean('remove_cover')) {
+            if ($profile && $profile->cover_path) {
+                Storage::disk('public')->delete($profile->cover_path);
+            }
+            $data['cover_path'] = null;
+        }
+
+        if (!$profile) {
+            $user->cosplayerProfile()->create($data);
         } else {
-            $user->cosplayerProfile()->update($validated);
+            $profile->update($data);
         }
 
         return redirect()->route('cosplayer.perfil.edit')->with('status', 'Perfil actualizado correctamente.');
@@ -71,10 +108,8 @@ class CosplayerProfileController extends Controller
         $user = auth()->user();
         $visibleIds = $request->input('visible_photos', []);
 
-        // Poner todas las fotos del usuario como no públicas
         $user->cosplayerPhotos()->update(['is_public' => false]);
 
-        // Marcar como públicas solo las seleccionadas (verificando que pertenezcan al usuario)
         if (!empty($visibleIds)) {
             $user->cosplayerPhotos()->whereIn('id', $visibleIds)->update(['is_public' => true]);
         }

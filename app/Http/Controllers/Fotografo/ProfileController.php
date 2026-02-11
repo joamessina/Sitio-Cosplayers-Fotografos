@@ -4,27 +4,27 @@ namespace App\Http\Controllers\Fotografo;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-public function edit()
-{
-    $user = auth()->user();
-    
-    // Si no tiene perfil, crear uno vacío con colores por defecto
-    if (!$user->photographerProfile) {
-        $user->photographerProfile()->create([
-            'display_name' => $user->name,
-            'primary_color' => '#6366f1',
-            'secondary_color' => '#a855f7',
-        ]);
-        $user->load('photographerProfile');
+    public function edit()
+    {
+        $user = auth()->user();
+
+        if (!$user->photographerProfile) {
+            $user->photographerProfile()->create([
+                'display_name' => $user->name,
+                'primary_color' => '#6366f1',
+                'secondary_color' => '#a855f7',
+            ]);
+            $user->load('photographerProfile');
+        }
+
+        $profile = $user->photographerProfile;
+
+        return view('fotografo.perfil.edit', compact('user', 'profile'));
     }
-
-    $profile = $user->photographerProfile;
-
-    return view('fotografo.perfil.edit', compact('user','profile'));
-}
 
     public function update(Request $request)
     {
@@ -36,6 +36,8 @@ public function edit()
             'location' => ['nullable', 'string', 'max:255'],
             'primary_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'secondary_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'avatar' => ['nullable', 'image', 'max:2048'],
+            'cover' => ['nullable', 'image', 'max:5120'],
         ], [
             'display_name.required' => 'El nombre a mostrar es obligatorio.',
             'display_name.max' => 'El nombre no puede superar los 255 caracteres.',
@@ -48,17 +50,50 @@ public function edit()
             'primary_color.regex' => 'El color primario debe ser un código hex válido (ej: #FF0000).',
             'secondary_color.required' => 'El color secundario es obligatorio.',
             'secondary_color.regex' => 'El color secundario debe ser un código hex válido (ej: #FF0000).',
+            'avatar.image' => 'El avatar debe ser una imagen.',
+            'avatar.max' => 'El avatar no puede superar los 2MB.',
+            'cover.image' => 'La foto de portada debe ser una imagen.',
+            'cover.max' => 'La foto de portada no puede superar los 5MB.',
         ]);
 
         $user = auth()->user();
+        $profile = $user->photographerProfile;
 
-        // Si no tiene perfil, crearlo
-        if (!$user->photographerProfile) {
-            $user->photographerProfile()->create($validated);
-        } else {
-            $user->photographerProfile()->update($validated);
+        // Datos del formulario (sin archivos)
+        $data = collect($validated)->except(['avatar', 'cover'])->toArray();
+
+        // Avatar
+        if ($request->hasFile('avatar')) {
+            if ($profile && $profile->avatar_path) {
+                Storage::disk('public')->delete($profile->avatar_path);
+            }
+            $data['avatar_path'] = $request->file('avatar')->store('avatars', 'public');
+        } elseif ($request->boolean('remove_avatar')) {
+            if ($profile && $profile->avatar_path) {
+                Storage::disk('public')->delete($profile->avatar_path);
+            }
+            $data['avatar_path'] = null;
         }
 
-        return redirect()->route('fotografo.perfil.edit')->with('status', 'Perfil actualizado ✅');
+        // Cover
+        if ($request->hasFile('cover')) {
+            if ($profile && $profile->cover_path) {
+                Storage::disk('public')->delete($profile->cover_path);
+            }
+            $data['cover_path'] = $request->file('cover')->store('covers', 'public');
+        } elseif ($request->boolean('remove_cover')) {
+            if ($profile && $profile->cover_path) {
+                Storage::disk('public')->delete($profile->cover_path);
+            }
+            $data['cover_path'] = null;
+        }
+
+        if (!$profile) {
+            $user->photographerProfile()->create($data);
+        } else {
+            $profile->update($data);
+        }
+
+        return redirect()->route('fotografo.perfil.edit')->with('status', 'Perfil actualizado correctamente.');
     }
 }

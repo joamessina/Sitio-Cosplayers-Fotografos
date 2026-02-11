@@ -14,6 +14,7 @@ use App\Http\Controllers\Public\PublicAlbumController;
 use App\Http\Controllers\Public\AlbumPublicController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Public\PortfolioController;
+use App\Http\Controllers\Public\ContactController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -70,6 +71,7 @@ Route::middleware(['auth', 'role:cosplayer'])
         Route::get('/mis-fotos', [\App\Http\Controllers\Cosplayer\MisFotosController::class, 'index'])->name('fotos.index');
         Route::post('/mis-fotos', [\App\Http\Controllers\Cosplayer\MisFotosController::class, 'store'])->name('fotos.store');
         Route::delete('/mis-fotos/{photo}', [\App\Http\Controllers\Cosplayer\MisFotosController::class, 'destroy'])->name('fotos.destroy');
+        Route::post('/mis-fotos/reorder', [\App\Http\Controllers\Cosplayer\MisFotosController::class, 'reorder'])->name('fotos.reorder');
 
         // Perfil cosplayer
         Route::get('/perfil', [CosplayerProfileController::class, 'edit'])->name('perfil.edit');
@@ -92,6 +94,7 @@ Route::get('/albumes', [AlbumPublicController::class, 'index'])->name('albumes.i
 Route::get('/albumes/{album}', [AlbumPublicController::class, 'show'])->name('albumes.show');
 
 Route::get('/@{username}', [PortfolioController::class, 'show'])->name('portfolio.show');
+Route::post('/contacto/{user}', [ContactController::class, 'store'])->name('contacto.store');
 
 // Rutas para favoritos (solo cosplayers autenticados)
 Route::middleware(['auth', 'role:cosplayer'])->group(function () {

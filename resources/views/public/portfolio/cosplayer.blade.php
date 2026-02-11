@@ -38,16 +38,33 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
             {{-- Hero Section --}}
-            <div class="portfolio-gradient rounded-3xl p-8 md:p-12 text-white shadow-xl">
+            <div class="relative rounded-3xl overflow-hidden text-white shadow-xl">
+                {{-- Background: cover image or gradient --}}
+                @if($user->cosplayerProfile->cover_path)
+                    <div class="absolute inset-0">
+                        <img src="{{ asset('storage/' . $user->cosplayerProfile->cover_path) }}" alt="Portada" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/50"></div>
+                    </div>
+                @else
+                    <div class="absolute inset-0 portfolio-gradient"></div>
+                @endif
+
+                <div class="relative p-8 md:p-12">
                 <div class="flex flex-col md:flex-row items-center gap-8">
 
                     {{-- Avatar --}}
                     <div class="flex-shrink-0">
-                        <div class="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-4 ring-white/30">
-                            <span class="text-5xl font-bold text-white">
-                                {{ strtoupper(substr($user->cosplayerProfile->display_name ?? $user->name, 0, 1)) }}
-                            </span>
-                        </div>
+                        @if($user->cosplayerProfile->avatar_path)
+                            <div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-white/30">
+                                <img src="{{ asset('storage/' . $user->cosplayerProfile->avatar_path) }}" alt="{{ $user->cosplayerProfile->display_name ?? $user->name }}" class="w-full h-full object-cover">
+                            </div>
+                        @else
+                            <div class="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-4 ring-white/30">
+                                <span class="text-5xl font-bold text-white">
+                                    {{ strtoupper(substr($user->cosplayerProfile->display_name ?? $user->name, 0, 1)) }}
+                                </span>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Info --}}
@@ -98,8 +115,18 @@
                                     Sitio Web
                                 </a>
                             @endif
+
+                            <button type="button" x-data @click="$dispatch('open-contact-modal')"
+                                class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 px-4 py-2 rounded-lg transition font-medium cursor-pointer">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                Contactar
+                            </button>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
 
@@ -113,10 +140,14 @@
 
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         @foreach ($photos as $photo)
-                            <div class="group relative aspect-square bg-gray-100 rounded-xl overflow-hidden ring-1 ring-gray-200 hover:ring-purple-300 hover:shadow-lg transition">
+                            <div class="gallery-item group relative aspect-square bg-gray-100 rounded-xl overflow-hidden ring-1 ring-gray-200 hover:ring-purple-300 hover:shadow-lg transition">
+                                {{-- Skeleton placeholder --}}
+                                <div class="skeleton-img absolute inset-0"></div>
+
                                 <img src="{{ asset('storage/' . $photo->path) }}"
                                      alt="{{ $photo->caption ?? 'Foto de cosplay' }}"
-                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                     onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'">
 
                                 @if($photo->caption)
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4">
@@ -149,6 +180,126 @@
                 </div>
             @endif
 
+        </div>
+    </div>
+
+    {{-- Modal de Contacto --}}
+    <div x-data="{
+            open: {{ $errors->any() ? 'true' : 'false' }},
+            sent: {{ session('contact_sent') ? 'true' : 'false' }}
+         }"
+         x-init="if (sent) open = true"
+         @open-contact-modal.window="open = true; sent = false"
+         x-show="open"
+         x-cloak
+         class="fixed inset-0 z-50 overflow-y-auto"
+         aria-labelledby="modal-title" role="dialog" aria-modal="true">
+
+        {{-- Overlay --}}
+        <div x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="open = false"></div>
+
+        {{-- Modal --}}
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div x-show="open" x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:scale-95"
+                 class="relative w-full max-w-lg bg-white rounded-2xl shadow-xl p-6 sm:p-8"
+                 @click.away="open = false">
+
+                {{-- Cerrar --}}
+                <button @click="open = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+
+                {{-- Mensaje enviado --}}
+                <template x-if="sent">
+                    <div class="text-center py-8">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Mensaje enviado</h3>
+                        <p class="text-gray-600">Tu mensaje fue enviado correctamente. El destinatario lo recibirá por email.</p>
+                        <button @click="open = false" class="mt-6 btn-primary">Cerrar</button>
+                    </div>
+                </template>
+
+                {{-- Formulario --}}
+                <template x-if="!sent">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1" id="modal-title">
+                            Contactar a {{ $user->cosplayerProfile->display_name ?? $user->name }}
+                        </h3>
+                        <p class="text-sm text-gray-500 mb-6">Enviá un mensaje sin exponer tus datos personales</p>
+
+                        @if($errors->has('rate_limit'))
+                            <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                                {{ $errors->first('rate_limit') }}
+                            </div>
+                        @endif
+
+                        <form action="{{ route('contacto.store', $user) }}" method="POST" class="space-y-4">
+                            @csrf
+
+                            <div>
+                                <label for="sender_name" class="form-label form-label-required">Tu nombre</label>
+                                <input type="text" name="sender_name" id="sender_name" value="{{ old('sender_name') }}" required class="form-input" placeholder="Juan Perez">
+                                @error('sender_name')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="sender_email" class="form-label form-label-required">Tu email</label>
+                                <input type="email" name="sender_email" id="sender_email" value="{{ old('sender_email') }}" required class="form-input" placeholder="tu@email.com">
+                                @error('sender_email')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="subject" class="form-label">Asunto</label>
+                                <input type="text" name="subject" id="subject" value="{{ old('subject') }}" class="form-input" placeholder="Consulta sobre sesión de fotos">
+                                @error('subject')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="message" class="form-label form-label-required">Mensaje</label>
+                                <textarea name="message" id="message" rows="4" required class="form-textarea" placeholder="Escribí tu mensaje...">{{ old('message') }}</textarea>
+                                @error('message')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <p class="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
+                                El sistema de mensajes estará disponible próximamente.
+                            </p>
+
+                            <div class="flex justify-end gap-3 pt-2">
+                                <button type="button" @click="open = false" class="btn-secondary">Cerrar</button>
+                                <button type="submit" disabled class="btn-primary opacity-50 cursor-not-allowed">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Enviar mensaje
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </template>
+            </div>
         </div>
     </div>
 </x-app-layout>

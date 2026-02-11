@@ -185,12 +185,14 @@
                         <div
                             class="bg-white rounded-xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-lg hover:ring-indigo-300 transition group">
 
-                            {{-- Thumbnail --}}
+                            {{-- Thumbnail con skeleton --}}
                             <div
-                                class="aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center relative overflow-hidden">
+                                class="gallery-item aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center relative overflow-hidden">
                                 @if ($album->thumbnail)
+                                    <div class="skeleton-img absolute inset-0"></div>
                                     <img src="{{ asset('storage/' . $album->thumbnail) }}" alt="{{ $album->title }}"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                        class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                        onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'">
                                 @else
                                     <svg class="w-16 h-16 text-indigo-300" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">

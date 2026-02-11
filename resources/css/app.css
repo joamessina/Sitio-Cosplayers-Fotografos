@@ -204,3 +204,44 @@
 .btn-secondary {
     @apply inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition;
 }
+
+/* ========================================
+   SKELETON LOADING
+   ======================================== */
+
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.skeleton {
+    @apply bg-gray-200 rounded-lg;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-img {
+    @apply w-full h-full bg-gray-200;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.gallery-item img {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item img.loaded {
+    opacity: 1;
+}
+
+/* Sortable drag & drop states */
+.sortable-ghost {
+    @apply ring-2 ring-indigo-400 opacity-50;
+}
+
+.sortable-chosen {
+    @apply shadow-xl;
+}
+
+.sortable-drag {
+    @apply rotate-2;
+}

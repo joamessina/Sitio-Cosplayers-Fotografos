@@ -9,7 +9,6 @@
 @endphp
 <a href="{{ route('portfolio.show', $portfolioUsername) }}"
     target="_blank" class="btn-secondary">
-                target="_blank" class="btn-secondary">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -25,20 +24,140 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            @if (session('success'))
+            @if (session('status'))
                 <div class="alert-success">
                     <div class="alert-success-content">
                         <svg class="alert-success-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <p class="alert-success-text">{{ session('success') }}</p>
+                        <p class="alert-success-text">{{ session('status') }}</p>
                     </div>
                 </div>
             @endif
 
-            <form action="{{ route('fotografo.perfil.update') }}" method="POST" class="space-y-6">
+            <form action="{{ route('fotografo.perfil.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
+
+                {{-- Card: Fotos de perfil --}}
+                <div class="profile-card" x-data="{
+                    avatarPreview: '{{ $profile->avatar_path ? asset('storage/' . $profile->avatar_path) : '' }}',
+                    coverPreview: '{{ $profile->cover_path ? asset('storage/' . $profile->cover_path) : '' }}',
+                    hasAvatar: {{ $profile->avatar_path ? 'true' : 'false' }},
+                    hasCover: {{ $profile->cover_path ? 'true' : 'false' }},
+                    removeAvatar: false,
+                    removeCover: false,
+                    handleAvatar(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            this.avatarPreview = URL.createObjectURL(file);
+                            this.hasAvatar = true;
+                            this.removeAvatar = false;
+                        }
+                    },
+                    handleCover(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            this.coverPreview = URL.createObjectURL(file);
+                            this.hasCover = true;
+                            this.removeCover = false;
+                        }
+                    },
+                    clearAvatar() {
+                        this.avatarPreview = '';
+                        this.hasAvatar = false;
+                        this.removeAvatar = true;
+                        this.$refs.avatarInput.value = '';
+                    },
+                    clearCover() {
+                        this.coverPreview = '';
+                        this.hasCover = false;
+                        this.removeCover = true;
+                        this.$refs.coverInput.value = '';
+                    }
+                }">
+                    <div class="profile-section-header">
+                        <div class="profile-section-icon profile-section-icon--indigo">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="profile-section-title">Fotos de perfil</h3>
+                            <p class="profile-section-subtitle">Avatar y foto de portada para tu portfolio</p>
+                        </div>
+                    </div>
+
+                    {{-- Foto de portada --}}
+                    <div>
+                        <label class="form-label">Foto de portada</label>
+                        <div class="relative w-full aspect-[3/1] rounded-lg border-2 border-dashed border-gray-300 overflow-hidden cursor-pointer hover:border-indigo-400 transition"
+                             @click="$refs.coverInput.click()">
+                            <template x-if="coverPreview && !removeCover">
+                                <img :src="coverPreview" class="w-full h-full object-cover" alt="Preview portada">
+                            </template>
+                            <template x-if="!coverPreview || removeCover">
+                                <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                                    <svg class="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span class="text-sm">Click para elegir imagen (max 5MB)</span>
+                                </div>
+                            </template>
+                        </div>
+                        <input type="file" name="cover" accept="image/*" class="hidden" x-ref="coverInput" @change="handleCover($event)">
+                        <input type="hidden" name="remove_cover" :value="removeCover ? '1' : '0'">
+                        <template x-if="hasCover && !removeCover">
+                            <button type="button" @click.prevent="clearCover()" class="mt-2 text-sm text-red-600 hover:text-red-800">
+                                Eliminar portada
+                            </button>
+                        </template>
+                        @error('cover')
+                            <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Avatar --}}
+                    <div>
+                        <label class="form-label">Avatar</label>
+                        <div class="flex items-center gap-4">
+                            <div class="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 cursor-pointer hover:border-indigo-400 transition flex-shrink-0"
+                                 @click="$refs.avatarInput.click()">
+                                <template x-if="avatarPreview && !removeAvatar">
+                                    <img :src="avatarPreview" class="w-full h-full object-cover" alt="Preview avatar">
+                                </template>
+                                <template x-if="!avatarPreview || removeAvatar">
+                                    <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+                                    </div>
+                                </template>
+                            </div>
+                            <div>
+                                <button type="button" @click="$refs.avatarInput.click()" class="btn-secondary text-sm">
+                                    Elegir imagen
+                                </button>
+                                <p class="form-hint mt-1">Imagen cuadrada, max 2MB</p>
+                                <template x-if="hasAvatar && !removeAvatar">
+                                    <button type="button" @click.prevent="clearAvatar()" class="text-sm text-red-600 hover:text-red-800 mt-1">
+                                        Eliminar avatar
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                        <input type="file" name="avatar" accept="image/*" class="hidden" x-ref="avatarInput" @change="handleAvatar($event)">
+                        <input type="hidden" name="remove_avatar" :value="removeAvatar ? '1' : '0'">
+                        @error('avatar')
+                            <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 

@@ -14,6 +14,7 @@ class Photo extends Model
         'path',
         'caption',
         'is_public',
+        'sort_order',
     ];
 
     protected $casts = [

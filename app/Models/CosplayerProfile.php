@@ -20,6 +20,8 @@ class CosplayerProfile extends Model
         'location',
         'primary_color',
         'secondary_color',
+        'avatar_path',
+        'cover_path',
     ];
 
     public function user(): BelongsTo

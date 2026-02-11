@@ -83,4 +83,9 @@ public function favoriteAlbums()
     return $this->belongsToMany(Album::class, 'favorites')->withTimestamps();
 }
 
+public function contactMessages()
+{
+    return $this->hasMany(ContactMessage::class, 'recipient_id');
+}
+
 }

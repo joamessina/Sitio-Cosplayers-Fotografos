@@ -66,23 +66,46 @@
             {{-- Galería de fotos subidas --}}
             @if ($photos->isNotEmpty())
                 <div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Mi Galería</h2>
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-900">Mi Galería</h2>
+                            <p class="text-sm text-gray-500 mt-1">Arrastrá las fotos para reordenar tu galería</p>
+                        </div>
+                        <div id="reorderStatus" class="text-sm text-green-600 font-medium hidden">
+                            <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Orden guardado
+                        </div>
+                    </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div id="sortableGallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         @foreach ($photos as $photo)
-                            <div class="group relative aspect-square bg-gray-100 rounded-xl overflow-hidden ring-1 ring-gray-200">
-                                <img src="{{ asset('storage/' . $photo->path) }}" 
-                                     alt="{{ $photo->caption ?? 'Foto de cosplay' }}" 
-                                     class="w-full h-full object-cover">
-                                
+                            <div class="gallery-item group relative aspect-square bg-gray-100 rounded-xl overflow-hidden ring-1 ring-gray-200 cursor-grab active:cursor-grabbing"
+                                 data-id="{{ $photo->id }}">
+                                {{-- Skeleton placeholder --}}
+                                <div class="skeleton-img absolute inset-0"></div>
+
+                                <img src="{{ asset('storage/' . $photo->path) }}"
+                                     alt="{{ $photo->caption ?? 'Foto de cosplay' }}"
+                                     class="w-full h-full object-cover"
+                                     onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'">
+
+                                {{-- Ícono de drag --}}
+                                <div class="absolute top-2 left-2 bg-black/50 text-white rounded-lg p-1.5 opacity-0 group-hover:opacity-100 transition pointer-events-none">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                                    </svg>
+                                </div>
+
                                 {{-- Overlay con acciones --}}
                                 <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                                    <form action="{{ route('cosplayer.fotos.destroy', $photo) }}" 
+                                    <form action="{{ route('cosplayer.fotos.destroy', $photo) }}"
                                           method="POST"
                                           onsubmit="return confirm('¿Eliminar esta foto?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" 
+                                        <button type="submit"
                                                 class="bg-red-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-700">
                                             Eliminar
                                         </button>
@@ -130,6 +153,7 @@
     @endpush
 
     @push('scripts')
+    <script src="https://unpkg.com/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
     <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
@@ -182,6 +206,41 @@
             document.getElementById('submitText').classList.add('hidden');
             document.getElementById('submitLoading').classList.remove('hidden');
         });
+
+        // Drag & drop para reordenar fotos
+        const gallery = document.getElementById('sortableGallery');
+        if (gallery) {
+            Sortable.create(gallery, {
+                animation: 200,
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
+                onEnd: function() {
+                    const items = gallery.querySelectorAll('[data-id]');
+                    const order = Array.from(items).map(item => parseInt(item.dataset.id));
+
+                    const status = document.getElementById('reorderStatus');
+
+                    fetch('{{ route("cosplayer.fotos.reorder") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({ order: order })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && status) {
+                            status.classList.remove('hidden');
+                            setTimeout(() => status.classList.add('hidden'), 2000);
+                        }
+                    })
+                    .catch(err => console.error('Error al reordenar:', err));
+                }
+            });
+        }
     </script>
     @endpush
 </x-app-layout>

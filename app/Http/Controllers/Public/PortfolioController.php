@@ -11,34 +11,29 @@ class PortfolioController extends Controller
     {
         // Decodificar espacios en la URL
         $username = urldecode($username);
-        
+
         // Remover @ si viene en la URL
         $username = ltrim($username, '@');
-        
-        // 1. Buscar por nombre o email
-        $user = User::where(function($query) use ($username) {
-            $query->where('name', $username)
-                  ->orWhere('name', 'LIKE', $username)
-                  ->orWhere('email', 'LIKE', $username . '@%');
+
+        // 1. Buscar por Instagram (más específico, es lo que genera la URL del dashboard)
+        $user = User::whereHas('photographerProfile', function($query) use ($username) {
+            $query->where('instagram', $username);
         })->first();
 
-        // 2. Si no encuentra, buscar por la parte del email (antes del @)
-        if (!$user) {
-            $user = User::whereRaw('SUBSTRING_INDEX(email, "@", 1) = ?', [$username])->first();
-        }
-
-        // 3. Si no encuentra, buscar por Instagram en photographer_profiles
-        if (!$user) {
-            $user = User::whereHas('photographerProfile', function($query) use ($username) {
-                $query->where('instagram', $username);
-            })->first();
-        }
-
-        // 4. Si no encuentra, buscar por Instagram en cosplayer_profiles
         if (!$user) {
             $user = User::whereHas('cosplayerProfile', function($query) use ($username) {
                 $query->where('instagram', $username);
             })->first();
+        }
+
+        // 2. Buscar por email prefix (fallback cuando no hay instagram)
+        if (!$user) {
+            $user = User::where('email', 'LIKE', $username . '@%')->first();
+        }
+
+        // 3. Buscar por nombre exacto
+        if (!$user) {
+            $user = User::where('name', $username)->first();
         }
 
         if (!$user) {
@@ -64,6 +59,7 @@ class PortfolioController extends Controller
             // Fotos del cosplayer
             $photos = $user->cosplayerPhotos()
                 ->where('is_public', true)
+                ->orderBy('sort_order')
                 ->latest()
                 ->paginate(12);
 

@@ -15,6 +15,8 @@ use App\Http\Controllers\Public\AlbumPublicController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Public\PortfolioController;
 use App\Http\Controllers\Public\ContactController;
+use App\Http\Controllers\Public\ShopController;
+use App\Http\Controllers\Shop\ShopItemController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -95,6 +97,20 @@ Route::get('/albumes/{album}', [AlbumPublicController::class, 'show'])->name('al
 
 Route::get('/@{username}', [PortfolioController::class, 'show'])->name('portfolio.show');
 Route::post('/contacto/{user}', [ContactController::class, 'store'])->name('contacto.store');
+
+// Shop público
+Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/shop/{shopItem}', [ShopController::class, 'show'])->name('shop.show');
+
+// Mi Shop (todos los usuarios autenticados)
+Route::middleware(['auth'])->prefix('mi-shop')->name('mi-shop.')->group(function () {
+    Route::get('/', [ShopItemController::class, 'index'])->name('index');
+    Route::get('/create', [ShopItemController::class, 'create'])->name('create');
+    Route::post('/', [ShopItemController::class, 'store'])->name('store');
+    Route::get('/{shopItem}/edit', [ShopItemController::class, 'edit'])->name('edit');
+    Route::put('/{shopItem}', [ShopItemController::class, 'update'])->name('update');
+    Route::delete('/{shopItem}', [ShopItemController::class, 'destroy'])->name('destroy');
+});
 
 // Rutas para favoritos (solo cosplayers autenticados)
 Route::middleware(['auth', 'role:cosplayer'])->group(function () {

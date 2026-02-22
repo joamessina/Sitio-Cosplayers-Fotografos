@@ -23,12 +23,12 @@
 
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('home') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('home') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </a>
-            <h2 class="text-xl font-semibold text-gray-900">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
                 Portfolio de {{ $user->cosplayerProfile->display_name ?? $user->name }}
             </h2>
         </div>
@@ -132,15 +132,15 @@
 
             {{-- Galería de Fotos --}}
             @if ($photos->isNotEmpty())
-                <div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
+                <div class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-8 ring-1 ring-gray-200 dark:ring-gray-700">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Mi Galería</h2>
-                        <p class="text-gray-600 mt-1">{{ $photos->total() }} {{ $photos->total() === 1 ? 'foto' : 'fotos' }}</p>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Mi Galería</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1">{{ $photos->total() }} {{ $photos->total() === 1 ? 'foto' : 'fotos' }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         @foreach ($photos as $photo)
-                            <div class="gallery-item group relative aspect-square bg-gray-100 rounded-xl overflow-hidden ring-1 ring-gray-200 hover:ring-purple-300 hover:shadow-lg transition">
+                            <div class="gallery-item group relative aspect-square bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden ring-1 ring-gray-200 dark:ring-gray-700 hover:ring-purple-300 hover:shadow-lg transition">
                                 {{-- Skeleton placeholder --}}
                                 <div class="skeleton-img absolute inset-0"></div>
 
@@ -167,14 +167,14 @@
                 </div>
             @else
                 {{-- Sin fotos --}}
-                <div class="bg-white shadow-sm rounded-2xl p-12 ring-1 ring-gray-200 text-center">
+                <div class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-12 ring-1 ring-gray-200 dark:ring-gray-700 text-center">
                     <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                         </path>
                     </svg>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Todavía no hay fotos</h3>
-                    <p class="text-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Todavía no hay fotos</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
                         Este cosplayer está preparando su galería.
                     </p>
                 </div>
@@ -209,11 +209,11 @@
                  x-transition:leave="transition ease-in duration-200"
                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                  x-transition:leave-end="opacity-0 translate-y-4 sm:scale-95"
-                 class="relative w-full max-w-lg bg-white rounded-2xl shadow-xl p-6 sm:p-8"
+                 class="relative w-full max-w-lg bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 sm:p-8"
                  @click.away="open = false">
 
                 {{-- Cerrar --}}
-                <button @click="open = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <button @click="open = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -222,13 +222,13 @@
                 {{-- Mensaje enviado --}}
                 <template x-if="sent">
                     <div class="text-center py-8">
-                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
-                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Mensaje enviado</h3>
-                        <p class="text-gray-600">Tu mensaje fue enviado correctamente. El destinatario lo recibirá por email.</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Mensaje enviado</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Tu mensaje fue enviado correctamente. El destinatario lo recibirá por email.</p>
                         <button @click="open = false" class="mt-6 btn-primary">Cerrar</button>
                     </div>
                 </template>
@@ -236,13 +236,13 @@
                 {{-- Formulario --}}
                 <template x-if="!sent">
                     <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-1" id="modal-title">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1" id="modal-title">
                             Contactar a {{ $user->cosplayerProfile->display_name ?? $user->name }}
                         </h3>
-                        <p class="text-sm text-gray-500 mb-6">Enviá un mensaje sin exponer tus datos personales</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Enviá un mensaje sin exponer tus datos personales</p>
 
                         @if($errors->has('rate_limit'))
-                            <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                            <div class="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-300">
                                 {{ $errors->first('rate_limit') }}
                             </div>
                         @endif

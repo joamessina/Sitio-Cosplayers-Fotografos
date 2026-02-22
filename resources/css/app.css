@@ -12,7 +12,7 @@
     }
 
     .card {
-        @apply rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200;
+        @apply rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm ring-1 ring-gray-200 dark:ring-gray-700;
     }
 
     .btn-primary {
@@ -20,7 +20,7 @@
     }
 
     .btn-secondary {
-        @apply inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50;
+        @apply inline-flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700;
     }
 }
 
@@ -72,7 +72,7 @@
 
 /* Section Headers */
 .profile-section-header {
-    @apply flex items-center gap-3 pb-6 border-b border-gray-200;
+    @apply flex items-center gap-3 pb-6 border-b border-gray-200 dark:border-gray-700;
 }
 
 .profile-section-icon {
@@ -88,21 +88,21 @@
 }
 
 .profile-section-title {
-    @apply text-lg font-semibold text-gray-900;
+    @apply text-lg font-semibold text-gray-900 dark:text-white;
 }
 
 .profile-section-subtitle {
-    @apply text-sm text-gray-600;
+    @apply text-sm text-gray-600 dark:text-gray-400;
 }
 
 /* Form Cards */
 .profile-card {
-    @apply bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200 space-y-6;
+    @apply bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-8 ring-1 ring-gray-200 dark:ring-gray-700 space-y-6;
 }
 
 /* Form Labels */
 .form-label {
-    @apply block text-sm font-medium text-gray-700 mb-2;
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
 }
 
 .form-label-required::after {
@@ -112,7 +112,7 @@
 
 /* Form Inputs */
 .form-input {
-    @apply w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition;
+    @apply w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 transition;
 }
 
 .form-input--with-icon-left {
@@ -124,16 +124,16 @@
 }
 
 .form-textarea {
-    @apply w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition;
+    @apply w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 transition;
 }
 
 /* Input Icons */
 .input-icon-left {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500;
 }
 
 .input-prefix {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm;
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 font-medium text-sm;
 }
 
 /* Form Hints */
@@ -143,12 +143,12 @@
 
 /* Form Errors */
 .form-error {
-    @apply mt-2 text-sm text-red-600;
+    @apply mt-2 text-sm text-red-600 dark:text-red-400;
 }
 
 /* Success Messages */
 .alert-success {
-    @apply mb-6 rounded-xl bg-green-50 p-4 ring-1 ring-green-200;
+    @apply mb-6 rounded-xl bg-green-50 dark:bg-green-900/20 p-4 ring-1 ring-green-200 dark:ring-green-800;
 }
 
 .alert-success-content {
@@ -160,12 +160,12 @@
 }
 
 .alert-success-text {
-    @apply text-sm font-medium text-green-800;
+    @apply text-sm font-medium text-green-800 dark:text-green-300;
 }
 
 /* Portfolio Preview Box */
 .portfolio-preview {
-    @apply mt-6 p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-100;
+    @apply mt-6 p-5 bg-gradient-to-br from-indigo-50 dark:from-indigo-900/30 to-purple-50 dark:to-purple-900/30 rounded-xl border border-indigo-100 dark:border-indigo-800;
 }
 
 .portfolio-preview-content {
@@ -173,28 +173,28 @@
 }
 
 .portfolio-preview-icon {
-    @apply w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0;
+    @apply w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center flex-shrink-0;
 }
 
 .portfolio-preview-icon svg {
-    @apply w-5 h-5 text-indigo-600;
+    @apply w-5 h-5 text-indigo-600 dark:text-indigo-400;
 }
 
 .portfolio-preview-label {
-    @apply text-sm font-medium text-indigo-900 mb-1;
+    @apply text-sm font-medium text-indigo-900 dark:text-indigo-300 mb-1;
 }
 
 .portfolio-preview-url {
-    @apply text-sm text-indigo-700 font-mono break-all;
+    @apply text-sm text-indigo-700 dark:text-indigo-400 font-mono break-all;
 }
 
 /* Action Buttons Bar */
 .form-actions {
-    @apply flex flex-col sm:flex-row items-center justify-between gap-4 bg-white shadow-sm rounded-2xl p-6 ring-1 ring-gray-200;
+    @apply flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-6 ring-1 ring-gray-200 dark:ring-gray-700;
 }
 
 .btn-back {
-    @apply inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition;
+    @apply inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition;
 }
 
 .btn-primary {
@@ -215,12 +215,12 @@
 }
 
 .skeleton {
-    @apply bg-gray-200 rounded-lg;
+    @apply bg-gray-200 dark:bg-gray-700 rounded-lg;
     animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
 .skeleton-img {
-    @apply w-full h-full bg-gray-200;
+    @apply w-full h-full bg-gray-200 dark:bg-gray-700;
     animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 

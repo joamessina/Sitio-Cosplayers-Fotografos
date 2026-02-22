@@ -13,7 +13,7 @@
 
             {{-- Filtros --}}
             <div x-data="{ showAdvanced: {{ request()->hasAny(['buscar', 'fecha_exacta', 'fecha_desde', 'fecha_hasta', 'orden']) && !in_array(request('orden'), ['', 'recientes']) ? 'true' : 'false' }} }"
-                 class="bg-white shadow-sm rounded-2xl p-6 ring-1 ring-gray-200 mb-6">
+                 class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-6 ring-1 ring-gray-200 dark:ring-gray-700 mb-6">
                 <form method="GET" action="{{ route('albumes.index') }}" class="space-y-4">
 
                     {{-- Filtros básicos --}}
@@ -21,11 +21,11 @@
 
                         {{-- Filtro por fotógrafo --}}
                         <div>
-                            <label for="fotografo" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="fotografo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Fotógrafo
                             </label>
                             <select name="fotografo" id="fotografo"
-                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="">Todos los fotógrafos</option>
                                 @foreach ($fotografos as $fotografo)
                                     <option value="{{ $fotografo->id }}"
@@ -38,27 +38,27 @@
 
                         {{-- Filtro por evento --}}
                         <div>
-                            <label for="evento" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="evento" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Evento
                             </label>
                             <input type="text" name="evento" id="evento" value="{{ request('evento') }}"
                                 placeholder="Ej: Comic-Con"
-                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                         </div>
 
                         {{-- Filtro por ubicación --}}
                         <div>
-                            <label for="ubicacion" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="ubicacion" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Ubicación
                             </label>
                             <input type="text" name="ubicacion" id="ubicacion" value="{{ request('ubicacion') }}"
                                 placeholder="Ej: Buenos Aires"
-                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                         </div>
                     </div>
 
                     {{-- Toggle para filtros avanzados --}}
-                    <div class="border-t pt-4">
+                    <div class="border-t dark:border-gray-700 pt-4">
                         <button type="button" @click="showAdvanced = !showAdvanced"
                             class="inline-flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-medium">
                             <svg class="w-4 h-4 transition-transform" :class="showAdvanced ? 'rotate-180' : ''"
@@ -70,16 +70,16 @@
                     </div>
 
                     {{-- Filtros avanzados --}}
-                    <div x-show="showAdvanced" x-transition class="border-t pt-4 space-y-4">
+                    <div x-show="showAdvanced" x-transition class="border-t dark:border-gray-700 pt-4 space-y-4">
 
                         {{-- Búsqueda por texto --}}
                         <div>
-                            <label for="buscar" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="buscar" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Búsqueda por texto
                             </label>
                             <input type="text" name="buscar" id="buscar" value="{{ request('buscar') }}"
                                 placeholder="Buscar en títulos, descripciones y eventos..."
-                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                             <p class="text-xs text-gray-500 mt-1">Busca en títulos, descripciones y nombres de eventos</p>
                         </div>
 
@@ -87,39 +87,39 @@
 
                             {{-- Fecha exacta --}}
                             <div>
-                                <label for="fecha_exacta" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="fecha_exacta" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Fecha exacta del evento
                                 </label>
                                 <input type="date" name="fecha_exacta" id="fecha_exacta" value="{{ request('fecha_exacta') }}"
-                                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
 
                             {{-- Fecha desde --}}
                             <div>
-                                <label for="fecha_desde" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="fecha_desde" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Desde fecha
                                 </label>
                                 <input type="date" name="fecha_desde" id="fecha_desde" value="{{ request('fecha_desde') }}"
-                                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
 
                             {{-- Fecha hasta --}}
                             <div>
-                                <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Hasta fecha
                                 </label>
                                 <input type="date" name="fecha_hasta" id="fecha_hasta" value="{{ request('fecha_hasta') }}"
-                                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
                         </div>
 
                         {{-- Ordenamiento --}}
                         <div>
-                            <label for="orden" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="orden" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Ordenar por
                             </label>
                             <select name="orden" id="orden"
-                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="recientes" {{ request('orden') === 'recientes' ? 'selected' : '' }}>Más recientes</option>
                                 <option value="antiguos" {{ request('orden') === 'antiguos' ? 'selected' : '' }}>Más antiguos</option>
                                 <option value="evento_az" {{ request('orden') === 'evento_az' ? 'selected' : '' }}>Evento A-Z</option>
@@ -138,7 +138,7 @@
 
                         @if (request()->hasAny(['fotografo', 'evento', 'ubicacion', 'buscar', 'fecha_exacta', 'fecha_desde', 'fecha_hasta', 'orden']))
                             <a href="{{ route('albumes.index') }}"
-                                class="rounded-lg border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50 font-medium">
+                                class="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-6 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium">
                                 Limpiar filtros
                             </a>
                         @endif
@@ -149,21 +149,21 @@
             {{-- Resultados --}}
             @if ($albums->isEmpty())
                 {{-- Estado vacío --}}
-                <div class="bg-white shadow-sm rounded-2xl p-12 ring-1 ring-gray-200 text-center">
+                <div class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-12 ring-1 ring-gray-200 dark:ring-gray-700 text-center">
                     <svg class="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                         </path>
                     </svg>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                         @if (request()->hasAny(['fotografo', 'evento', 'ubicacion', 'buscar', 'fecha_exacta', 'fecha_desde', 'fecha_hasta']))
                             No se encontraron álbumes con esos filtros
                         @else
                             Todavía no hay álbumes públicos
                         @endif
                     </h3>
-                    <p class="text-gray-600">
+                    <p class="text-gray-600 dark:text-gray-400">
                         @if (request()->hasAny(['fotografo', 'evento', 'ubicacion', 'buscar', 'fecha_exacta', 'fecha_desde', 'fecha_hasta']))
                             Probá ajustando los filtros de búsqueda.
                         @else
@@ -174,7 +174,7 @@
             @else
                 {{-- Contador de resultados --}}
                 <div class="mb-4">
-                    <p class="text-sm text-gray-600">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
                         {{ $albums->total() }} {{ $albums->total() === 1 ? 'álbum encontrado' : 'álbumes encontrados' }}
                     </p>
                 </div>
@@ -183,11 +183,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($albums as $album)
                         <div
-                            class="bg-white rounded-xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-lg hover:ring-indigo-300 transition group">
+                            class="bg-white dark:bg-gray-900 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden hover:shadow-lg hover:ring-indigo-300 transition group">
 
                             {{-- Thumbnail con skeleton --}}
                             <div
-                                class="gallery-item aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center relative overflow-hidden">
+                                class="gallery-item aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center relative overflow-hidden">
                                 @if ($album->thumbnail)
                                     <div class="skeleton-img absolute inset-0"></div>
                                     <img src="{{ asset('storage/' . $album->thumbnail) }}" alt="{{ $album->title }}"
@@ -205,7 +205,7 @@
 
                             <div class="p-5">
                                 <h3
-                                    class="font-semibold text-gray-900 group-hover:text-indigo-600 mb-2 line-clamp-1 transition">
+                                    class="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 mb-2 line-clamp-1 transition">
                                     {{ $album->title }}
                                 </h3>
 
@@ -220,7 +220,7 @@
                                 </a>
 
                                 @if ($album->event)
-                                    <p class="text-sm text-gray-600 mb-2">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
                                         📸 {{ $album->event }}
                                     </p>
                                 @endif
@@ -269,7 +269,7 @@
                                         <button
                                             onclick="toggleFavorite({{ $album->id }}, this)"
                                             data-favorited="{{ $album->is_favorited_by_user ? 'true' : 'false' }}"
-                                            class="favorite-btn inline-flex items-center justify-center p-2 border-2 rounded-lg transition {{ $album->is_favorited_by_user ? 'border-red-300 text-red-600 bg-red-50' : 'border-gray-300 text-gray-700 hover:bg-gray-50' }}"
+                                            class="favorite-btn inline-flex items-center justify-center p-2 border-2 rounded-lg transition {{ $album->is_favorited_by_user ? 'border-red-300 text-red-600 bg-red-50' : 'border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800' }}"
                                             title="{{ $album->is_favorited_by_user ? 'Quitar de favoritos' : 'Agregar a favoritos' }}">
                                             <svg class="w-5 h-5" fill="{{ $album->is_favorited_by_user ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -280,7 +280,7 @@
 
                                     @if ($album->drive_url)
                                         <a href="{{ $album->drive_url }}" target="_blank" rel="noopener noreferrer"
-                                            class="inline-flex items-center justify-center p-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+                                            class="inline-flex items-center justify-center p-2 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
                                             title="Abrir en Google Drive">
                                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                                 <path

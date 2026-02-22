@@ -2,8 +2,8 @@
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Mis álbumes</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Administrá tus álbumes de fotos</p>
+                <h2 class="text-xl font-semibold text-gray-900">Mis álbumes</h2>
+                <p class="text-sm text-gray-600">Administrá tus álbumes de fotos</p>
             </div>
 
             <a href="{{ route('fotografo.albums.create') }}" class="btn-primary">
@@ -16,22 +16,22 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             @if (session('status'))
-                <div class="mb-6 rounded-lg bg-green-50 dark:bg-green-900/20 px-4 py-3 text-green-800 dark:text-green-300 ring-1 ring-green-200 dark:ring-green-800">
+                <div class="mb-6 rounded-lg bg-green-50 px-4 py-3 text-green-800 ring-1 ring-green-200">
                     {{ session('status') }}
                 </div>
             @endif
 
             @if ($albums->isEmpty())
                 {{-- Estado vacío --}}
-                <div class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-12 ring-1 ring-gray-200 dark:ring-gray-700 text-center">
+                <div class="bg-white shadow-sm rounded-2xl p-12 ring-1 ring-gray-200 text-center">
                     <svg class="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                         </path>
                     </svg>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Todavía no tenés álbumes</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Todavía no tenés álbumes</h3>
+                    <p class="text-gray-600 mb-6">
                         Creá tu primer álbum para compartir tus fotos con los cosplayers.
                     </p>
                     <a href="{{ route('fotografo.albums.create') }}" class="btn-primary">
@@ -43,11 +43,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($albums as $album)
                         <div
-                            class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden hover:shadow-md transition group">
+                            class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-md transition group">
 
                             {{-- Thumbnail --}}
                             <div
-                                class="aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center relative overflow-hidden">
+                                class="aspect-video bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center relative overflow-hidden">
                                 @if ($album->thumbnail)
                                     <img src="{{ asset('storage/' . $album->thumbnail) }}" alt="{{ $album->title }}"
                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
@@ -80,19 +80,19 @@
                             <div class="p-6">
                                 <div class="mb-3">
                                     <h3
-                                        class="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 group-hover:text-indigo-600 transition">
+                                        class="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-indigo-600 transition">
                                         {{ $album->title }}
                                     </h3>
 
                                     @if ($album->event)
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                        <p class="text-sm text-gray-600 mt-1">
                                             📸 {{ $album->event }}
                                         </p>
                                     @endif
                                 </div>
 
                                 {{-- Información adicional --}}
-                                <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                <div class="space-y-2 text-sm text-gray-600">
                                     @if ($album->event_date)
                                         <p class="flex items-center gap-2">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -120,7 +120,7 @@
                                     @endif
 
                                     @if ($album->description)
-                                        <p class="text-gray-700 dark:text-gray-300 mt-3 line-clamp-2">
+                                        <p class="text-gray-700 mt-3 line-clamp-2">
                                             {{ $album->description }}
                                         </p>
                                     @endif
@@ -140,10 +140,10 @@
 
                             {{-- Acciones --}}
                             <div
-                                class="border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-6 py-3 flex items-center justify-between gap-3">
+                                class="border-t border-gray-100 bg-gray-50 px-6 py-3 flex items-center justify-between gap-3">
                                 <div class="flex items-center gap-4">
                                     <a href="{{ route('fotografo.albums.edit', $album) }}"
-                                        class="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium">
+                                        class="text-sm text-gray-700 hover:text-gray-900 font-medium">
                                         Editar
                                     </a>
                                     <a href="{{ route('fotografo.albums.featured.edit', $album) }}"

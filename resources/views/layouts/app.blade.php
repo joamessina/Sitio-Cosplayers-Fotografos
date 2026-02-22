@@ -11,6 +11,16 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
+    <!-- FOUC prevention: apply dark class before CSS loads -->
+    <script>
+        if (localStorage.theme === 'dark' ||
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+
     <!-- Scripts -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <script src="{{ mix('js/app.js') }}" defer></script>
@@ -18,39 +28,38 @@
     @stack('styles')
 </head>
 
-<body class="font-sans antialiased min-h-screen flex flex-col">
+<body class="font-sans antialiased min-h-screen flex flex-col bg-slate-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
 
     @include('layouts.navigation')
 
     <!-- Page Heading -->
-    <header class="bg-white shadow">
+    <header class="bg-white dark:bg-gray-900 shadow dark:shadow-none dark:border-b dark:border-gray-700">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             {{ $header }}
         </div>
     </header>
 
     <!-- Page Content -->
-    <main class="flex-1 bg-slate-50">
+    <main class="flex-1 bg-slate-50 dark:bg-gray-950">
         {{ $slot }}
     </main>
 
     {{-- Footer con Cafecito --}}
-    {{-- Footer con Cafecito --}}
-    <footer class="bg-gray-50 border-t border-gray-200">
+    <footer class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="text-center md:text-left">
-                    <p class="text-sm text-gray-600">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
                         © {{ date('Y') }} Joaquín Messina. Todos los derechos reservados.
                     </p>
-                    <p class="text-xs text-gray-500 mt-1">
+                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
                         Este sitio y todo su contenido están protegidos por derechos de autor.
                     </p>
                 </div>
 
                 {{-- Botón oficial de Cafecito --}}
                 <div class="flex items-center gap-3">
-                    <p class="text-sm text-gray-600">¿Te gusta el proyecto?</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">¿Te gusta el proyecto?</p>
                     <a href='https://cafecito.app/joamessina' rel='noopener' target='_blank'>
                         <img srcset='https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x'
                             src='https://cdn.cafecito.app/imgs/buttons/button_2.png'

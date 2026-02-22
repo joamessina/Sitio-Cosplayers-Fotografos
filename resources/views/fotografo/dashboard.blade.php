@@ -2,8 +2,8 @@
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-xl font-semibold text-gray-900">Panel Fotógrafo</h2>
-                <p class="text-sm text-gray-600">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Panel Fotógrafo</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
                     Administrá tu perfil y tus álbumes.
                 </p>
             </div>
@@ -22,6 +22,10 @@
 
                 <a href="{{ route('fotografo.albums.index') }}" class="btn-secondary">
                     Mis álbumes
+                </a>
+
+                <a href="{{ route('mi-shop.index') }}" class="btn-secondary">
+                    🛍️ Mi Shop
                 </a>
             </div>
         </div>
@@ -85,12 +89,12 @@
 
             {{-- Próximos pasos --}}
             <div class="card">
-                <h3 class="text-lg font-semibold text-gray-900">Próximos pasos</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Próximos pasos</h3>
                 <p class="text-sm text-gray-600 mt-2">
                     Actualmente estamos en la Fase 1: Perfiles de fotógrafo.
                 </p>
 
-                <ul class="mt-4 space-y-2 text-sm text-gray-700">
+                <ul class="mt-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
                     <li class="flex gap-2"><span class="text-indigo-600">✓</span> Completar tu perfil público</li>
                     <li class="flex gap-2"><span class="text-indigo-600">→</span> Crear álbumes (Fase 2)</li>
                     <li class="flex gap-2"><span class="text-gray-400">○</span> Integración con Google Drive (Fase 4)

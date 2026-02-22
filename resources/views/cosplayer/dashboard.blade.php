@@ -5,8 +5,8 @@
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-xl font-semibold text-gray-900">Panel Cosplayer</h2>
-                <p class="text-sm text-gray-600">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Panel Cosplayer</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
                     Subí tus fotos y encontrá álbumes donde aparezcas.
                 </p>
             </div>
@@ -33,6 +33,10 @@
 
                 <a href="{{ route('cosplayer.favoritos.index') }}" class="btn-secondary">
                     ❤️ Mis favoritos
+                </a>
+
+                <a href="{{ route('mi-shop.index') }}" class="btn-secondary">
+                    🛍️ Mi Shop
                 </a>
 <a href="{{ route('portfolio.show', $user->cosplayerProfile?->instagram ?? Str::before($user->email, '@')) }}"
     target="_blank" class="btn-secondary">
@@ -73,7 +77,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="card p-5">
                     <p class="text-sm text-gray-500">Fotos subidas</p>
-                    <p class="text-3xl font-semibold text-gray-900 mt-2">{{ $photosCount ?? 0 }}</p>
+                    <p class="text-3xl font-semibold text-gray-900 dark:text-white mt-2">{{ $photosCount ?? 0 }}</p>
                     <a href="{{ route('cosplayer.fotos.index') }}"
                         class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
                         Ver mi galería →
@@ -107,14 +111,14 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="lg:col-span-2 card">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-900">Últimas fotos subidas</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Últimas fotos subidas</h3>
                         <a href="{{ route('cosplayer.fotos.index') }}" class="text-sm text-indigo-600 hover:underline">
                             Administrar
                         </a>
                     </div>
 
                     @if (empty($latestPhotos) || $latestPhotos->isEmpty())
-                        <div class="mt-4 rounded-lg bg-gray-50 p-6 ring-1 ring-gray-200">
+                        <div class="mt-4 rounded-lg bg-gray-50 dark:bg-gray-800 p-6 ring-1 ring-gray-200 dark:ring-gray-700">
                             <p class="text-gray-700">
                                 Todavía no subiste fotos. Subí la primera y armamos tu galería.
                             </p>
@@ -127,7 +131,7 @@
                         <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
                             @foreach ($latestPhotos as $p)
                                 <a href="{{ route('cosplayer.fotos.index') }}"
-                                    class="group block overflow-hidden rounded-lg bg-gray-100 ring-1 ring-gray-200">
+                                    class="group block overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700">
                                     <div class="aspect-square">
                                         <img src="{{ asset('storage/' . $p->path) }}" alt="foto"
                                             class="h-full w-full object-cover transition group-hover:scale-105">
@@ -139,12 +143,12 @@
                 </div>
 
                 <div class="card">
-                    <h3 class="text-lg font-semibold text-gray-900">Siguiente paso</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Siguiente paso</h3>
                     <p class="text-sm text-gray-600 mt-2">
                         Después de las fotos, vamos a implementar álbumes de fotógrafos con links de Drive.
                     </p>
 
-                    <ul class="mt-4 space-y-2 text-sm text-gray-700">
+                    <ul class="mt-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
                         <li class="flex gap-2"><span class="text-indigo-600">✓</span> Subida + galería (cosplayer)</li>
                         <li class="flex gap-2"><span class="text-indigo-600">✓</span> Roles separados</li>
                         <li class="flex gap-2"><span class="text-indigo-600">→</span> Álbumes fotógrafo (Drive)</li>

@@ -88,4 +88,9 @@ public function contactMessages()
     return $this->hasMany(ContactMessage::class, 'recipient_id');
 }
 
+public function shopItems()
+{
+    return $this->hasMany(ShopItem::class);
+}
+
 }

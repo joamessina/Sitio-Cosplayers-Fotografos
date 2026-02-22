@@ -10,15 +10,15 @@
 
             {{-- Mensaje de éxito --}}
             @if (session('success'))
-                <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded-lg">
                     {{ session('success') }}
                 </div>
             @endif
 
             {{-- Card de Upload Múltiple --}}
-            <div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
-                <h2 class="text-xl font-semibold text-gray-900 mb-2">Subí tus mejores fotos</h2>
-                <p class="text-sm text-gray-600 mb-6">
+            <div class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-8 ring-1 ring-gray-200 dark:ring-gray-700">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Subí tus mejores fotos</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
                     Esto es tu galería personal (MVP). Después la conectamos con fotógrafos.
                 </p>
 
@@ -39,7 +39,7 @@
 
                     {{-- Descripción opcional (para todas las fotos) --}}
                     <div class="mb-6">
-                        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Descripción (opcional)
                         </label>
                         <input type="text" 
@@ -47,7 +47,7 @@
                                id="description"
                                maxlength="120"
                                placeholder="Ej: Cosplay de Genshin Impact - Convención 2024"
-                               class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                               class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                         <p class="text-xs text-gray-500 mt-1">
                             Esta descripción se aplicará a todas las fotos que subas (máx. 120 caracteres)
                         </p>
@@ -65,10 +65,10 @@
 
             {{-- Galería de fotos subidas --}}
             @if ($photos->isNotEmpty())
-                <div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
+                <div class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-8 ring-1 ring-gray-200 dark:ring-gray-700">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h2 class="text-xl font-semibold text-gray-900">Mi Galería</h2>
+                            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Mi Galería</h2>
                             <p class="text-sm text-gray-500 mt-1">Arrastrá las fotos para reordenar tu galería</p>
                         </div>
                         <div id="reorderStatus" class="text-sm text-green-600 font-medium hidden">
@@ -81,7 +81,7 @@
 
                     <div id="sortableGallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         @foreach ($photos as $photo)
-                            <div class="gallery-item group relative aspect-square bg-gray-100 rounded-xl overflow-hidden ring-1 ring-gray-200 cursor-grab active:cursor-grabbing"
+                            <div class="gallery-item group relative aspect-square bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden ring-1 ring-gray-200 dark:ring-gray-700 cursor-grab active:cursor-grabbing"
                                  data-id="{{ $photo->id }}">
                                 {{-- Skeleton placeholder --}}
                                 <div class="skeleton-img absolute inset-0"></div>
@@ -148,6 +148,16 @@
         }
         .filepond--drop-label {
             color: #6b7280;
+        }
+        .dark .filepond--panel-root {
+            background-color: #1f2937;
+            border-color: #4b5563;
+        }
+        .dark .filepond--drop-label {
+            color: #9ca3af;
+        }
+        .dark .filepond--item-panel {
+            background-color: #374151;
         }
     </style>
     @endpush

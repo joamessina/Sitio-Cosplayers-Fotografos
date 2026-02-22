@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('fotografo.albums.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('fotografo.albums.index') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </a>
             <div>
-                <h2 class="text-xl font-semibold text-gray-900">Fotos Destacadas</h2>
-                <p class="text-sm text-gray-600">{{ $album->title }}</p>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Fotos Destacadas</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{{ $album->title }}</p>
             </div>
         </div>
     </x-slot>
@@ -28,11 +28,11 @@
                 </div>
             @endif
 
-            <div class="bg-white shadow-sm rounded-2xl p-8 ring-1 ring-gray-200">
+            <div class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-8 ring-1 ring-gray-200 dark:ring-gray-700">
 
                 <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Configurar fotos destacadas</h3>
-                    <p class="text-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Configurar fotos destacadas</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
                         Agregá hasta 5 URLs de fotos que se mostrarán destacadas en tu álbum público.
                         Estas fotos aparecerán en un carousel especial.
                     </p>
@@ -63,14 +63,14 @@
                             <template x-for="(url, index) in urls" :key="index">
                                 <div class="flex items-center gap-3">
                                     <div class="flex-1">
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                             Foto destacada <span x-text="index + 1"></span>
                                         </label>
                                         <input type="url"
                                             x-model="urls[index]"
                                             :name="'featured_urls[' + index + ']'"
                                             placeholder="https://ejemplo.com/foto.jpg"
-                                            class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
                                     </div>
                                     <button type="button"
                                         @click="removeUrl(index)"
@@ -85,8 +85,8 @@
                             </template>
                         </div>
 
-                        <div class="flex items-center justify-between pt-4 border-t">
-                            <p class="text-sm text-gray-600" x-text="getActiveCount() + ' de 5 fotos agregadas'"></p>
+                        <div class="flex items-center justify-between pt-4 border-t dark:border-gray-700">
+                            <p class="text-sm text-gray-600 dark:text-gray-400" x-text="getActiveCount() + ' de 5 fotos agregadas'"></p>
                         </div>
 
                         @error('featured_urls')
@@ -104,11 +104,11 @@
 
                     {{-- Preview --}}
                     @if($album->featured_photo_urls && count($album->featured_photo_urls) > 0)
-                        <div class="mt-8 p-6 bg-gray-50 rounded-xl">
-                            <h4 class="font-medium text-gray-900 mb-4">Fotos destacadas actuales:</h4>
+                        <div class="mt-8 p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                            <h4 class="font-medium text-gray-900 dark:text-white mb-4">Fotos destacadas actuales:</h4>
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                                 @foreach($album->featured_photo_urls as $index => $url)
-                                    <div class="aspect-square rounded-lg bg-gray-200 overflow-hidden">
+                                    <div class="aspect-square rounded-lg bg-gray-200 dark:bg-gray-700 overflow-hidden">
                                         <img src="{{ $url }}"
                                             alt="Foto destacada {{ $index + 1 }}"
                                             class="w-full h-full object-cover"

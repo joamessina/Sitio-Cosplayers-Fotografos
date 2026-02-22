@@ -5,259 +5,97 @@
 - **Responde SIEMPRE en español rioplatense argentino**
 - Usá voseo (vos, tenés, podés, sos, etc.)
 - Sé directo, claro y profesional
-- No uses lenguaje corporativo innecesario
 
 ## Sobre el Proyecto
 
-### Descripción
-
 Plataforma web para conectar **fotógrafos** y **cosplayers** en Argentina.
 
-- Los fotógrafos suben álbumes de eventos con links de Google Drive
-- Los cosplayers suben fotos individuales a su galería personal
-- Ambos tienen portfolios públicos accesibles vía `/@username`
+- Fotógrafos: suben álbumes con thumbnails y links de Google Drive
+- Cosplayers: suben fotos individuales a su galería personal
+- Ambos tienen portfolios públicos en `/@username`
 
-### Stack Tecnológico
+### Stack
 
 - **Backend:** PHP 8.1, Laravel 8.83
-- **Frontend:** Blade templates, Tailwind CSS 3.1, Alpine.js
-- **Base de datos:** PostgreSQL (producción), MySQL (local)
-- **Hosting:** Railway (con PostgreSQL incluido)
-- **Assets:** Laravel Mix, Vite
-- **File uploads:** FilePond (multi-upload), Storage local
-
-### Estructura de Roles
-
-- **Fotógrafo:** Crea álbumes con thumbnails, links de Drive, fecha/ubicación del evento
-- **Cosplayer:** Sube fotos individuales con descripción opcional
+- **Frontend:** Blade, Tailwind CSS 3.1, Alpine.js
+- **BD:** PostgreSQL (Railway), MySQL (local)
+- **Assets:** Laravel Mix | **Uploads:** FilePond
 
 ## Arquitectura
 
-### Modelos Principales
+### Modelos
 
-- `User` → roles: 'fotografo' o 'cosplayer'
-- `PhotographerProfile` → perfil público del fotógrafo (con colores personalizables)
-- `CosplayerProfile` → perfil público del cosplayer (con colores personalizables)
-- `Album` → álbumes de fotógrafos (con thumbnail, drive_url, y featured_photo_urls)
-- `Photo` → fotos individuales de cosplayers (con is_public)
-- `Favorite` → sistema de favoritos (relación User-Album)
+- `User` → roles: `fotografo` | `cosplayer`
+- `PhotographerProfile` / `CosplayerProfile` → perfiles con colores personalizables, avatar, cover
+- `Album` → álbumes del fotógrafo (thumbnail, drive_url, featured_photo_urls JSON)
+- `Photo` → fotos individuales cosplayer (sort_order, is_public)
+- `Favorite` → User ↔ Album
+- `ContactMessage` → mensajes de contacto (rate limiting por IP)
+- `ShopItem` → ítems de venta (photos JSON, status enum)
 
-### Rutas Públicas Importantes
+### Rutas clave
 
-- `/` → Landing page
-- `/@{username}` → Portfolio público (dinámico según rol)
-- `/fotografos` → Listado de fotógrafos
-- `/albumes` → Álbumes públicos recientes
+- `/@{username}` → portfolio público dinámico
+- `/fotografos` → listado fotógrafos
+- `/albumes` → álbumes con búsqueda avanzada
+- `/shop` → shop público
+- `/mi-shop` → gestión ítems (auth, ambos roles)
 
-### Controllers Clave
+### Controllers
 
-**Fotógrafos:**
-- `Fotografo/AlbumController` → CRUD álbumes
-- `Fotografo/ProfileController` → Editar perfil fotógrafo
-- `Fotografo/FeaturedPhotosController` → Gestión de fotos destacadas por álbum
-
-**Cosplayers:**
-- `Cosplayer/MisFotosController` → Upload/gestión de fotos
-- `Cosplayer/CosplayerProfileController` → Editar perfil + visibilidad de fotos
-- `Cosplayer/FavoriteController` → Sistema de favoritos (AJAX)
-
-**Públicos:**
-- `Public/PortfolioController` → Portfolios públicos dinámicos `/@username`
-- `Public/AlbumPublicController` → Listado álbumes con búsqueda avanzada
-- `HomeController` → Landing page con stats
-
-## Convenciones del Proyecto
-
-### Código
-
-- Nombres de rutas: `snake_case` (ej: `fotografo.albums.index`)
-- Nombres de variables: `camelCase` en PHP, `snake_case` en BD
-- Vistas Blade: `kebab-case` (ej: `mis-fotos.blade.php`)
-- Clases CSS custom: usar las del archivo `resources/css/app.css`
-
-### Base de Datos
-
-- Migraciones descriptivas: `YYYY_MM_DD_HHMMSS_accion_tabla.php`
-- Relaciones: usar `foreignId()->constrained()->cascadeOnDelete()`
-- Campos de fechas: usar `timestamp` o `date` según corresponda
-
-### Validaciones
-
-- Mensajes en español
-- Usar arrays para reglas de validación
-- Separar mensajes custom con segundo parámetro
-
-### Archivos
-
-- Thumbnails de álbumes: `storage/app/public/albums/`
-- Fotos de cosplayers: `storage/app/public/cosplayer-photos/`
-- Avatares: `storage/app/public/avatars/`
-- Portadas: `storage/app/public/covers/`
-- Assets compilados: `public/build/`
-
-## Features Completadas ✅
-
-### Core del Sistema
-1. Sistema de autenticación con Breeze (roles separados: fotógrafo/cosplayer)
-2. CRUD de álbumes para fotógrafos (con thumbnails y links de Drive)
-3. Multi-upload de fotos con FilePond para cosplayers
-4. Portfolios públicos dinámicos (`/@username`)
-5. Landing page profesional con stats en vivo
-6. Deploy en Railway con PostgreSQL
-7. Fix TrustProxies para HTTPS en Railway
-
-### Perfiles y Personalización
-8. Sistema de perfiles públicos para fotógrafos y cosplayers
-9. **Perfil de cosplayer editable** (formulario completo con datos, redes y selector de fotos públicas)
-10. **Customización de colores del portfolio** (color picker con preview en vivo + variables CSS dinámicas)
-
-### Features Avanzadas
-11. **Fotos destacadas** (hasta 5 fotos destacadas por álbum con preview)
-12. **Búsqueda avanzada** (filtros por evento, fecha, ubicación, texto + ordenamiento)
-13. **Sistema de favoritos** (cosplayers pueden guardar álbumes con corazón animado)
-
-### UI/UX
-14. Refactorización CSS (clases custom en `app.css`)
-15. Alpine.js para interactividad (toggle filters, color pickers, AJAX favoritos)
-16. Paginación en listados públicos
-17. Validaciones en español con mensajes custom
-
-### Quick Wins
-18. **Botón "Copiar URL del portfolio"** (JS puro con Clipboard API + toast notifications en ambos dashboards)
-19. **Ícono de Google Drive + validación del link** (SVG icon en 3 vistas de álbumes + DriveHelper + validación backend)
-20. **Skeleton loading en galerías** (CSS animation pulse + onload fade-in en portfolios y listado de álbumes)
-21. **Reordenar fotos del cosplayer** (SortableJS drag & drop + endpoint AJAX + campo sort_order en BD)
-
-### Alta Prioridad
-22. **Foto de perfil / avatar** (upload de imagen con preview en vivo, storage en `avatars/`, fallback a inicial del nombre en portfolios)
-23. **Foto de portada en portfolio** (imagen de banner en hero section con overlay oscuro, fallback a gradiente, storage en `covers/`)
-24. **Sistema de contacto** (modal Alpine.js en portfolios, tabla `contact_messages`, Mailable con replyTo, rate limiting 3/10min por IP)
-
-## Pendiente de Implementar 🚧
-
-### Backlog largo plazo
-1. **Google Drive API con cuenta del propietario** (actualmente son links manuales que ingresan los fotógrafos)
-2. **Sistema de suscripciones/pagos** (Mercado Pago o Stripe para planes premium)
-3. **Notificaciones** (alertas cuando un fotógrafo sube álbum de evento específico)
-
-## Próximo a Realizar 🗓️
-
-### Alta Prioridad (impacto directo en calidad del producto)
-| # | Feature | Detalle |
+| Namespace | Controller | Función |
 |---|---|---|
-| ~~AP1~~ | ~~**Foto de perfil / avatar**~~ | ✅ COMPLETADO |
-| ~~AP2~~ | ~~**Foto de portada en portfolio**~~ | ✅ COMPLETADO |
-| AP3 | **SEO / Open Graph meta tags** | Preview al compartir `/@username` en redes sociales. Solo vistas, sin tocar BD |
-| ~~AP4~~ | ~~**Sistema de contacto**~~ | ✅ COMPLETADO |
+| `Fotografo/` | `AlbumController` | CRUD álbumes |
+| `Fotografo/` | `ProfileController` | Perfil fotógrafo |
+| `Fotografo/` | `FeaturedPhotosController` | Fotos destacadas por álbum |
+| `Cosplayer/` | `MisFotosController` | Upload + reorder fotos |
+| `Cosplayer/` | `CosplayerProfileController` | Perfil + visibilidad fotos |
+| `Cosplayer/` | `FavoriteController` | Favoritos AJAX |
+| `Public/` | `PortfolioController` | Portfolios `/@username` |
+| `Public/` | `AlbumPublicController` | Listado álbumes |
+| `Public/` | `ShopController` | Shop público |
+| `Public/` | `ContactController` | Recibir mensajes |
+| `Shop/` | `ShopItemController` | CRUD mi-shop |
 
-### Nice to Have
-| # | Feature | Detalle |
-|---|---|---|
-| NH1 | **Compartir álbum individual** | Botón para copiar/compartir link directo de un álbum específico |
-| NH2 | **Modo oscuro** | Toggle en la UI que afecta todo el CSS. Persistido con Alpine + localStorage |
+## Convenciones
 
-### Orden sugerido de implementación
-1. ~~QW1 → QW2 → QW3 → QW4~~ ✅ COMPLETADOS
-2. ~~AP1 + AP2 + AP4~~ ✅ COMPLETADOS
-3. AP3 (SEO, solo vistas)
-4. NH1 (muy simple)
-5. NH2 (modo oscuro, el más complejo por impacto en CSS global)
+- Rutas: `snake_case` (ej: `fotografo.albums.index`)
+- Vistas Blade: `kebab-case`
+- Migraciones: clase sin return type, `foreignId()->constrained()->cascadeOnDelete()`
+- Flash messages: `session('status')` (no `session('success')`)
+- Forms con upload: `enctype="multipart/form-data"` siempre
+- Validaciones: mensajes en español, arrays de reglas
 
-## Comandos Útiles
+### Storage
 
-### Desarrollo
+- Álbumes: `albums/` | Cosplayer: `cosplayer-photos/` | Shop: `shop-items/`
+- Avatares: `avatars/` | Portadas: `covers/`
+- Patrón: `$file->store('carpeta', 'public')` / `Storage::disk('public')->delete($path)`
 
-```bash
-php artisan serve                 # Servidor local
-php artisan migrate               # Ejecutar migraciones
-php artisan migrate:fresh --seed  # Reset BD con datos de prueba
-php artisan storage:link          # Link simbólico storage
-npm run dev                       # Compilar assets en desarrollo
-npm run build                     # Compilar para producción
-```
+## Features Implementadas ✅
 
-### Railway
+Auth (Breeze), CRUD álbumes, upload fotos (FilePond), portfolios públicos, landing page, Railway deploy, perfiles editables, colores personalizables, fotos destacadas, búsqueda avanzada, favoritos (AJAX), CSS refactor, paginación, botón copiar URL, Drive icon+validación, skeleton loading, reordenar fotos (SortableJS), avatar, cover, sistema de contacto (Resend API, rate limiting), dark mode, **Shop** (tabla shop_items, CRUD, FilePond, status active/sold/inactive).
 
-```bash
-git push origin master            # Deploy automático a Railway
-```
+## Pendiente 🚧
+
+- **AP3**: SEO / Open Graph meta tags en `/@username` (solo vistas)
+- **NH1**: Compartir álbum individual (copiar link)
+- Largo plazo: Google Drive API, pagos (MercadoPago), notificaciones
 
 ## Notas Importantes
 
-- **NO uses `cosplayer.photos.*`**, las rutas son `cosplayer.fotos.*`
-- Las thumbnails se guardan en `storage/app/public/albums/`
-- Los portfolios detectan automáticamente el rol del usuario
-- El `AppServiceProvider` fuerza HTTPS en producción
-- Railway usa PostgreSQL, local usa MySQL (ajustar conexión según ambiente)
+- **NO usar `cosplayer.photos.*`** → las rutas son `cosplayer.fotos.*`
+- Email: API de Resend directo (`\Resend::client()`), **NO** instalar `resend/resend-laravel` (requiere L9+)
+- Alpine.js: botones con `@click` necesitan estar dentro de un scope `x-data`
+- `AppServiceProvider` fuerza HTTPS en producción
+- Railway usa PostgreSQL, local usa MySQL
 
-## Para Tareas Comunes
-
-### Crear un nuevo controller
+## Comandos
 
 ```bash
-php artisan make:controller Namespace/NombreController
+php artisan serve
+php artisan migrate
+php artisan storage:link
+npm run dev / npm run build
+git push origin master   # deploy Railway
 ```
-
-### Crear una migración
-
-```bash
-php artisan make:migration nombre_descriptivo_de_la_accion
-```
-
-### Crear un modelo con migración
-
-```bash
-php artisan make:model NombreModelo -m
-```
-
-### Limpiar caché
-
-```bash
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-```
-
----
-
-## Historial de Actualizaciones
-
-**2026-02-09:** Auditoría completa del codebase. Se movieron 5 features de "Pendiente" a "Completadas":
-- Perfil de cosplayer editable (vista completa con 410 líneas)
-- Customización de colores del portfolio (con color picker y preview)
-- Fotos destacadas (hasta 5 por álbum)
-- Búsqueda avanzada (filtros múltiples + ordenamiento)
-- Sistema de favoritos (AJAX con corazón animado)
-
-Total features implementadas: **24/27** (89% del roadmap completado)
-
-**2026-02-09 (sesión de fixes):**
-
-*Fixes realizados:*
-- **Bug crítico `layouts/app.blade.php`**: faltaba `@stack('styles')` en el `<head>`. Las vistas que usan `@push('styles')` (como los portfolios) no inyectaban sus estilos CSS. Efecto: el texto blanco del hero section era invisible al no tener el gradiente de fondo. También se movió `@stack('scripts')` al final del `<body>` donde corresponde.
-- **Bug layout `cosplayer/perfil/edit.blade.php`**: la sección "Personalización de colores" estaba anidada dentro de la card de "Redes sociales". Se la movió como card independiente fuera del grid de 2 columnas.
-- **Fix UX botones de acción**: los botones "Volver al Dashboard" y "Guardar cambios" tenían una card completa que ocupaba mucho espacio. Se reemplazó por un `flex` compacto con `pt-4`.
-- **Fix portfolio cosplayer**: datos del perfil (ubicación, redes sociales) no se mostraban. La causa raíz era el bug del `@stack('styles')` mencionado arriba.
-- **CLAUDE.md actualizado**: se corrigió el listado de features completadas vs pendientes.
-
-**2026-02-10 (Quick Wins completados):**
-
-*Features implementadas:*
-- **QW3 Skeleton loading**: CSS animation `skeleton-pulse` + clase `.skeleton-img` en `app.css`. Aplicado en 3 vistas: portfolio cosplayer, portfolio fotógrafo y listado público de álbumes. Usa `onload` para fade-in cuando la imagen carga.
-- **QW4 Reordenar fotos cosplayer**: Migración `add_sort_order_to_photos_table` (campo `sort_order` unsigned integer default 0). SortableJS para drag & drop en `mis-fotos.blade.php`. Endpoint `POST cosplayer/mis-fotos/reorder` en `MisFotosController`. Queries actualizadas para ordenar por `sort_order` en `MisFotosController` y `PortfolioController`.
-
-*Nota:* QW1 y QW2 ya estaban implementados correctamente de la sesión anterior. Se verificaron y están OK.
-
-**2026-02-11 (AP1 + AP2 + AP4):**
-
-*Features implementadas:*
-- **AP1 Foto de perfil / avatar**: Migración `add_avatar_and_cover_to_profiles` (campos `avatar_path` nullable en ambas tablas de perfil). Upload con validación (image, max 2MB), preview en vivo con Alpine.js + `URL.createObjectURL`. Storage en `avatars/`. Borrado del anterior al reemplazar. Checkbox "Eliminar avatar" para remover sin reemplazar. Fallback a inicial del nombre en portfolios públicos.
-- **AP2 Foto de portada**: Misma migración (campo `cover_path` nullable). Upload con validación (image, max 5MB). Preview aspect-[3/1] con dashed border. Storage en `covers/`. En portfolios públicos: imagen de fondo con overlay oscuro (`bg-black/50`), fallback al gradiente de colores. Misma lógica de borrado/reemplazo que avatar.
-- **AP4 Sistema de contacto**: Tabla `contact_messages` (recipient_id FK, sender_name, sender_email, subject nullable, message, sender_ip, is_read). Modelo `ContactMessage`. Mailable `ContactMessageMail` (Markdown con replyTo del sender). `ContactController` con rate limiting (3 mensajes/IP cada 10 min via `RateLimiter`). Try/catch en envío de mail. Ruta `POST /contacto/{user}`. Modal Alpine.js en ambos portfolios con animaciones, auto-apertura con errores de validación, y feedback de éxito.
-
-*Archivos nuevos (6):* migración avatar/cover, migración contact_messages, `ContactMessage.php`, `ContactMessageMail.php`, `contact-message.blade.php`, `ContactController.php`
-*Archivos modificados (10):* 2 modelos de perfil, User.php, 2 controllers de perfil, 2 vistas de edición, 2 portfolios públicos, `web.php`
-
----
-
-**Fin de instrucciones. Cualquier duda, preguntá en español rioplatense.**

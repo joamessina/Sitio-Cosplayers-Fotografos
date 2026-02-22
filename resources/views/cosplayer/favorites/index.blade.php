@@ -2,8 +2,8 @@
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-xl font-semibold text-gray-900">Mis álbumes favoritos</h2>
-                <p class="text-sm text-gray-600">Álbumes que marcaste como favoritos</p>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Mis álbumes favoritos</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Álbumes que marcaste como favoritos</p>
             </div>
         </div>
     </x-slot>
@@ -13,14 +13,14 @@
 
             @if ($favoriteAlbums->isEmpty())
                 {{-- Estado vacío --}}
-                <div class="bg-white shadow-sm rounded-2xl p-12 ring-1 ring-gray-200 text-center">
+                <div class="bg-white dark:bg-gray-900 shadow-sm rounded-2xl p-12 ring-1 ring-gray-200 dark:ring-gray-700 text-center">
                     <svg class="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                         </path>
                     </svg>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No tenés álbumes favoritos aún</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No tenés álbumes favoritos aún</h3>
                     <p class="text-gray-600 mb-6">
                         Explorá álbumes de fotógrafos y marcá los que más te gusten como favoritos.
                     </p>
@@ -31,7 +31,7 @@
             @else
                 {{-- Contador de favoritos --}}
                 <div class="mb-4">
-                    <p class="text-sm text-gray-600">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
                         {{ $favoriteAlbums->total() }} {{ $favoriteAlbums->total() === 1 ? 'álbum favorito' : 'álbumes favoritos' }}
                     </p>
                 </div>
@@ -40,11 +40,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($favoriteAlbums as $album)
                         <div
-                            class="bg-white rounded-xl shadow-sm ring-1 ring-gray-200 overflow-hidden hover:shadow-lg hover:ring-pink-300 transition group">
+                            class="bg-white dark:bg-gray-900 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden hover:shadow-lg hover:ring-pink-300 transition group">
 
                             {{-- Thumbnail --}}
                             <div
-                                class="aspect-video bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center relative overflow-hidden">
+                                class="aspect-video bg-gradient-to-br from-pink-100 dark:from-pink-900/30 to-purple-100 dark:to-purple-900/30 flex items-center justify-center relative overflow-hidden">
                                 @if ($album->thumbnail)
                                     <img src="{{ asset('storage/' . $album->thumbnail) }}" alt="{{ $album->title }}"
                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
@@ -71,7 +71,7 @@
 
                             <div class="p-5">
                                 <h3
-                                    class="font-semibold text-gray-900 group-hover:text-pink-600 mb-2 line-clamp-1 transition">
+                                    class="font-semibold text-gray-900 dark:text-white group-hover:text-pink-600 mb-2 line-clamp-1 transition">
                                     {{ $album->title }}
                                 </h3>
 
@@ -86,12 +86,12 @@
                                 </a>
 
                                 @if ($album->event)
-                                    <p class="text-sm text-gray-600 mb-2">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
                                         📸 {{ $album->event }}
                                     </p>
                                 @endif
 
-                                <div class="flex items-center gap-3 text-xs text-gray-500 mt-3">
+                                <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-500 mt-3">
                                     @if ($album->event_date)
                                         <span class="flex items-center gap-1">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"

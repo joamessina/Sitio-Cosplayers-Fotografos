@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
                 Editar mi perfil
             </h2>
             @php
@@ -94,7 +94,7 @@
                     {{-- Foto de portada --}}
                     <div>
                         <label class="form-label">Foto de portada</label>
-                        <div class="relative w-full aspect-[3/1] rounded-lg border-2 border-dashed border-gray-300 overflow-hidden cursor-pointer hover:border-indigo-400 transition"
+                        <div class="relative w-full aspect-[3/1] rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 overflow-hidden cursor-pointer hover:border-indigo-400 transition"
                              @click="$refs.coverInput.click()">
                             <template x-if="coverPreview && !removeCover">
                                 <img :src="coverPreview" class="w-full h-full object-cover" alt="Preview portada">
@@ -125,13 +125,13 @@
                     <div>
                         <label class="form-label">Avatar</label>
                         <div class="flex items-center gap-4">
-                            <div class="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 cursor-pointer hover:border-indigo-400 transition flex-shrink-0"
+                            <div class="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-400 transition flex-shrink-0"
                                  @click="$refs.avatarInput.click()">
                                 <template x-if="avatarPreview && !removeAvatar">
                                     <img :src="avatarPreview" class="w-full h-full object-cover" alt="Preview avatar">
                                 </template>
                                 <template x-if="!avatarPreview || removeAvatar">
-                                    <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                                    <div class="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400">
                                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -315,7 +315,7 @@
                                 <div class="flex items-center gap-3">
                                     <input type="color" name="primary_color" id="primary_color"
                                         value="{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}"
-                                        class="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer">
+                                        class="w-12 h-12 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer">
                                     <div class="flex-1">
                                         <input type="text"
                                             value="{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}"
@@ -338,7 +338,7 @@
                                 <div class="flex items-center gap-3">
                                     <input type="color" name="secondary_color" id="secondary_color"
                                         value="{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}"
-                                        class="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer">
+                                        class="w-12 h-12 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer">
                                     <div class="flex-1">
                                         <input type="text"
                                             value="{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}"
@@ -356,8 +356,8 @@
                         </div>
 
                         {{-- Preview de colores --}}
-                        <div class="mt-4 p-4 rounded-lg border border-gray-200 bg-gray-50">
-                            <p class="text-sm font-medium text-gray-700 mb-3">Vista previa:</p>
+                        <div class="mt-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Vista previa:</p>
                             <div x-data="{
                                 primaryColor: '{{ old('primary_color', $profile->primary_color ?? '#6366f1') }}',
                                 secondaryColor: '{{ old('secondary_color', $profile->secondary_color ?? '#a855f7') }}'
@@ -390,7 +390,7 @@
                                 <div class="flex items-center gap-2">
                                     <span :style="`background: linear-gradient(135deg, ${primaryColor}, ${secondaryColor});`"
                                         class="w-8 h-8 rounded-lg"></span>
-                                    <span class="text-sm text-gray-600">Gradiente</span>
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Gradiente</span>
                                 </div>
 
                                 <span :style="`color: ${primaryColor};`" class="text-sm font-medium">

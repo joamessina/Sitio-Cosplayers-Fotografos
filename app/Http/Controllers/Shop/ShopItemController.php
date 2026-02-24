@@ -25,6 +25,14 @@ class ShopItemController extends Controller
 
     public function store(Request $request)
     {
+        // Si PHP rechazó el request por post_max_size, $_FILES y $_POST quedan vacíos
+        if (
+            $request->server('CONTENT_LENGTH') > 0 &&
+            empty($_FILES) && empty($_POST)
+        ) {
+            return back()->withErrors(['photos' => 'El total de archivos supera el límite permitido. Intentá con menos fotos o de menor tamaño.']);
+        }
+
         $validated = $request->validate([
             'title'       => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
@@ -81,6 +89,13 @@ class ShopItemController extends Controller
     {
         if ($shopItem->user_id !== auth()->id()) {
             abort(403);
+        }
+
+        if (
+            $request->server('CONTENT_LENGTH') > 0 &&
+            empty($_FILES) && empty($_POST)
+        ) {
+            return back()->withErrors(['new_photos' => 'El total de archivos supera el límite permitido. Intentá con menos fotos o de menor tamaño.']);
         }
 
         $validated = $request->validate([

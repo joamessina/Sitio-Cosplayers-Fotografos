@@ -58,6 +58,9 @@
                                         <x-dropdown-link :href="route('mi-shop.index')">
                                             🛍️ Mi Shop
                                         </x-dropdown-link>
+                                        <x-dropdown-link :href="route('feedback.create')">
+                                            💬 Feedback
+                                        </x-dropdown-link>
                                     @else
                                         <x-dropdown-link :href="route('cosplayer.dashboard')">
                                             📊 Panel
@@ -70,6 +73,9 @@
                                         </x-dropdown-link>
                                         <x-dropdown-link :href="route('mi-shop.index')">
                                             🛍️ Mi Shop
+                                        </x-dropdown-link>
+                                        <x-dropdown-link :href="route('feedback.create')">
+                                            💬 Feedback
                                         </x-dropdown-link>
                                     @endif
                                 </x-slot>
@@ -226,6 +232,9 @@
                     <x-responsive-nav-link :href="route('mi-shop.index')" :active="request()->routeIs('mi-shop.*')">
                         🛍️ Mi Shop
                     </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('feedback.create')" :active="request()->routeIs('feedback.*')">
+                        💬 Feedback
+                    </x-responsive-nav-link>
                 @else
                     <x-responsive-nav-link :href="route('cosplayer.dashboard')" :active="request()->routeIs('cosplayer.dashboard')">
                         📊 Panel
@@ -241,6 +250,9 @@
 
                     <x-responsive-nav-link :href="route('mi-shop.index')" :active="request()->routeIs('mi-shop.*')">
                         🛍️ Mi Shop
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('feedback.create')" :active="request()->routeIs('feedback.*')">
+                        💬 Feedback
                     </x-responsive-nav-link>
                 @endif
             </div>

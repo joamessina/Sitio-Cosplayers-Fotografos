@@ -17,6 +17,7 @@ use App\Http\Controllers\Public\PortfolioController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\ShopController;
 use App\Http\Controllers\Shop\ShopItemController;
+use App\Http\Controllers\FeedbackController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -97,6 +98,10 @@ Route::get('/albumes/{album}', [AlbumPublicController::class, 'show'])->name('al
 
 Route::get('/@{username}', [PortfolioController::class, 'show'])->name('portfolio.show');
 Route::post('/contacto/{user}', [ContactController::class, 'store'])->name('contacto.store');
+
+// Feedback
+Route::get('/feedback', [FeedbackController::class, 'create'])->name('feedback.create');
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 
 // Shop público
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');

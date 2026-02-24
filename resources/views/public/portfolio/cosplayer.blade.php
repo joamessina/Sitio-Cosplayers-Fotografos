@@ -3,8 +3,8 @@
     @push('styles')
     <style>
         :root {
-            --portfolio-primary: {{ $user->cosplayerProfile->primary_color ?? '#6366f1' }};
-            --portfolio-secondary: {{ $user->cosplayerProfile->secondary_color ?? '#a855f7' }};
+            --portfolio-primary: {{ $user->cosplayerProfile?->primary_color ?? '#6366f1' }};
+            --portfolio-secondary: {{ $user->cosplayerProfile?->secondary_color ?? '#a855f7' }};
         }
         .portfolio-gradient {
             background: linear-gradient(135deg, var(--portfolio-primary), var(--portfolio-secondary));
@@ -29,7 +29,7 @@
                 </svg>
             </a>
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                Portfolio de {{ $user->cosplayerProfile->display_name ?? $user->name }}
+                Portfolio de {{ $user->cosplayerProfile?->display_name ?? $user->name }}
             </h2>
         </div>
     </x-slot>
@@ -40,9 +40,9 @@
             {{-- Hero Section --}}
             <div class="relative rounded-3xl overflow-hidden text-white shadow-xl">
                 {{-- Background: cover image or gradient --}}
-                @if($user->cosplayerProfile->cover_path)
+                @if($user->cosplayerProfile?->cover_path)
                     <div class="absolute inset-0">
-                        <img src="{{ asset('storage/' . $user->cosplayerProfile->cover_path) }}" alt="Portada" class="w-full h-full object-cover">
+                        <img src="{{ asset('storage/' . $user->cosplayerProfile?->cover_path) }}" alt="Portada" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black/50"></div>
                     </div>
                 @else
@@ -54,14 +54,14 @@
 
                     {{-- Avatar --}}
                     <div class="flex-shrink-0">
-                        @if($user->cosplayerProfile->avatar_path)
+                        @if($user->cosplayerProfile?->avatar_path)
                             <div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-white/30">
-                                <img src="{{ asset('storage/' . $user->cosplayerProfile->avatar_path) }}" alt="{{ $user->cosplayerProfile->display_name ?? $user->name }}" class="w-full h-full object-cover">
+                                <img src="{{ asset('storage/' . $user->cosplayerProfile?->avatar_path) }}" alt="{{ $user->cosplayerProfile?->display_name ?? $user->name }}" class="w-full h-full object-cover">
                             </div>
                         @else
                             <div class="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-4 ring-white/30">
                                 <span class="text-5xl font-bold text-white">
-                                    {{ strtoupper(substr($user->cosplayerProfile->display_name ?? $user->name, 0, 1)) }}
+                                    {{ strtoupper(substr($user->cosplayerProfile?->display_name ?? $user->name, 0, 1)) }}
                                 </span>
                             </div>
                         @endif
@@ -70,10 +70,10 @@
                     {{-- Info --}}
                     <div class="flex-1 text-center md:text-left">
                         <h1 class="text-4xl font-bold mb-2">
-                            {{ $user->cosplayerProfile->display_name ?? $user->name }}
+                            {{ $user->cosplayerProfile?->display_name ?? $user->name }}
                         </h1>
 
-                        @if ($user->cosplayerProfile && $user->cosplayerProfile->location)
+                        @if ($user->cosplayerProfile && $user->cosplayerProfile?->location)
                             <p class="text-white/90 flex items-center justify-center md:justify-start gap-2 mb-4">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -82,30 +82,30 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
-                                {{ $user->cosplayerProfile->location }}
+                                {{ $user->cosplayerProfile?->location }}
                             </p>
                         @endif
 
-                        @if ($user->cosplayerProfile && $user->cosplayerProfile->bio)
+                        @if ($user->cosplayerProfile && $user->cosplayerProfile?->bio)
                             <p class="text-lg text-white/95 leading-relaxed max-w-2xl mb-6">
-                                {{ $user->cosplayerProfile->bio }}
+                                {{ $user->cosplayerProfile?->bio }}
                             </p>
                         @endif
 
                         {{-- Social Links --}}
                         <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                            @if ($user->cosplayerProfile && $user->cosplayerProfile->instagram)
-                                <a href="https://instagram.com/{{ $user->cosplayerProfile->instagram }}" target="_blank"
+                            @if ($user->cosplayerProfile && $user->cosplayerProfile?->instagram)
+                                <a href="https://instagram.com/{{ $user->cosplayerProfile?->instagram }}" target="_blank"
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg text-white font-medium transition">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                                     </svg>
-                                    {{ '@' . $user->cosplayerProfile->instagram }}
+                                    {{ '@' . $user->cosplayerProfile?->instagram }}
                                 </a>
                             @endif
 
-                            @if ($user->cosplayerProfile && $user->cosplayerProfile->portfolio_url)
-                                <a href="{{ $user->cosplayerProfile->portfolio_url }}" target="_blank" rel="noopener noreferrer"
+                            @if ($user->cosplayerProfile && $user->cosplayerProfile?->portfolio_url)
+                                <a href="{{ $user->cosplayerProfile?->portfolio_url }}" target="_blank" rel="noopener noreferrer"
                                     class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 px-4 py-2 rounded-lg transition">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -237,7 +237,7 @@
                 <template x-if="!sent">
                     <div>
                         <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1" id="modal-title">
-                            Contactar a {{ $user->cosplayerProfile->display_name ?? $user->name }}
+                            Contactar a {{ $user->cosplayerProfile?->display_name ?? $user->name }}
                         </h3>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Enviá un mensaje sin exponer tus datos personales</p>
 

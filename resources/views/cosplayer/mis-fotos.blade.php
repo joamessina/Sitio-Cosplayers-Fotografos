@@ -86,7 +86,7 @@
                                 {{-- Skeleton placeholder --}}
                                 <div class="skeleton-img absolute inset-0"></div>
 
-                                <img src="{{ asset('storage/' . $photo->path) }}"
+                                <img src="{{ storage_url($photo->path) }}"
                                      alt="{{ $photo->caption ?? 'Foto de cosplay' }}"
                                      class="w-full h-full object-cover"
                                      onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'">

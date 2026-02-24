@@ -57,7 +57,7 @@ class ShopItemController extends Controller
         $photoPaths = [];
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
-                $photoPaths[] = $photo->store('shop-items', 'public');
+                $photoPaths[] = $photo->store('shop-items', 's3');
             }
         }
 
@@ -128,7 +128,7 @@ class ShopItemController extends Controller
         $removePhotos = $request->input('remove_photos', []);
         foreach ($removePhotos as $path) {
             if (in_array($path, $currentPhotos)) {
-                Storage::disk('public')->delete($path);
+                Storage::disk('s3')->delete($path);
                 $currentPhotos = array_values(array_filter($currentPhotos, fn($p) => $p !== $path));
             }
         }
@@ -137,7 +137,7 @@ class ShopItemController extends Controller
         if ($request->hasFile('new_photos')) {
             foreach ($request->file('new_photos') as $photo) {
                 if (count($currentPhotos) >= 10) break;
-                $currentPhotos[] = $photo->store('shop-items', 'public');
+                $currentPhotos[] = $photo->store('shop-items', 's3');
             }
         }
 
@@ -170,7 +170,7 @@ class ShopItemController extends Controller
 
         // Borrar fotos del storage
         foreach ($shopItem->photos ?? [] as $path) {
-            Storage::disk('public')->delete($path);
+            Storage::disk('s3')->delete($path);
         }
 
         $shopItem->delete();

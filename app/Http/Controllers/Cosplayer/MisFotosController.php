@@ -58,7 +58,7 @@ class MisFotosController extends Controller
             \Log::info("  - Tipo: " . $photo->getMimeType());
 
             try {
-                $path = $photo->store('cosplayer-photos', 'public');
+                $path = $photo->store('cosplayer-photos', 's3');
                 \Log::info("  ✅ Archivo guardado en: " . $path);
 
                 $photoRecord = auth()->user()->cosplayerPhotos()->create([
@@ -109,7 +109,7 @@ class MisFotosController extends Controller
         }
 
         // Eliminar archivo del storage
-        Storage::disk('public')->delete($photo->path);
+        Storage::disk('s3')->delete($photo->path);
 
         // Eliminar registro
         $photo->delete();

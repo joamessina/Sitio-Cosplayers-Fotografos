@@ -41,8 +41,8 @@
 
                 {{-- Card: Fotos de perfil --}}
                 <div class="profile-card" x-data="{
-                    avatarPreview: '{{ $profile->avatar_path ? asset('storage/' . $profile->avatar_path) : '' }}',
-                    coverPreview: '{{ $profile->cover_path ? asset('storage/' . $profile->cover_path) : '' }}',
+                    avatarPreview: '{{ $profile->avatar_path ? storage_url($profile->avatar_path) : '' }}',
+                    coverPreview: '{{ $profile->cover_path ? storage_url($profile->cover_path) : '' }}',
                     hasAvatar: {{ $profile->avatar_path ? 'true' : 'false' }},
                     hasCover: {{ $profile->cover_path ? 'true' : 'false' }},
                     removeAvatar: false,

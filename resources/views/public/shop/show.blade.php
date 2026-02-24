@@ -20,7 +20,7 @@
                         {{-- Foto principal --}}
                         <div class="w-full bg-gray-950 rounded-2xl overflow-hidden ring-1 ring-gray-200 dark:ring-gray-700 flex items-center justify-center" style="min-height:280px; max-height:500px;">
                             @foreach ($shopItem->photos as $i => $photo)
-                                <img src="{{ asset('storage/' . $photo) }}"
+                                <img src="{{ storage_url($photo) }}"
                                      alt="{{ $shopItem->title }}"
                                      x-show="active === {{ $i }}"
                                      class="w-full h-full object-contain"
@@ -35,7 +35,7 @@
                                     <button @click="active = {{ $i }}"
                                             class="shrink-0 w-16 h-16 rounded-lg overflow-hidden ring-2 transition"
                                             :class="active === {{ $i }} ? 'ring-indigo-500' : 'ring-gray-200 dark:ring-gray-700 hover:ring-indigo-300'">
-                                        <img src="{{ asset('storage/' . $photo) }}"
+                                        <img src="{{ storage_url($photo) }}"
                                              alt="miniatura {{ $i + 1 }}"
                                              class="w-full h-full object-cover">
                                     </button>
@@ -116,7 +116,7 @@
                         {{-- Avatar --}}
                         <div class="w-12 h-12 rounded-full overflow-hidden bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center shrink-0">
                             @if ($avatar)
-                                <img src="{{ asset('storage/' . $avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                                <img src="{{ storage_url($avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
                             @else
                                 <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                             @endif

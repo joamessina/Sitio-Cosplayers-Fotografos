@@ -76,7 +76,7 @@
                         @foreach ($photos as $p)
                             <div class="overflow-hidden rounded-xl ring-1 ring-gray-200 bg-white">
                                 <div class="aspect-square bg-gray-50">
-                                    <img src="{{ asset('storage/' . $p->path) }}" alt="foto"
+                                    <img src="{{ storage_url($p->path) }}" alt="foto"
                                         class="w-full h-full object-cover" />
                                 </div>
 

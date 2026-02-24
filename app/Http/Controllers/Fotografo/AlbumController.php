@@ -55,7 +55,7 @@ class AlbumController extends Controller
 
         // Manejar upload de thumbnail
         if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('albums', 'public');
+            $validated['thumbnail'] = $request->file('thumbnail')->store('albums', 's3');
         }
 
         // Convertir is_public a boolean (checkbox)
@@ -110,11 +110,11 @@ class AlbumController extends Controller
         // Manejar upload de nueva thumbnail
         if ($request->hasFile('thumbnail')) {
             // Eliminar thumbnail anterior si existe
-            if ($album->thumbnail && Storage::disk('public')->exists($album->thumbnail)) {
-                Storage::disk('public')->delete($album->thumbnail);
+            if ($album->thumbnail && Storage::disk('s3')->exists($album->thumbnail)) {
+                Storage::disk('s3')->delete($album->thumbnail);
             }
             
-            $validated['thumbnail'] = $request->file('thumbnail')->store('albums', 'public');
+            $validated['thumbnail'] = $request->file('thumbnail')->store('albums', 's3');
         }
 
         // Convertir is_public a boolean (checkbox)
@@ -132,8 +132,8 @@ class AlbumController extends Controller
         abort_unless($album->user_id === auth()->id(), 403);
 
         // Eliminar thumbnail si existe
-        if ($album->thumbnail && Storage::disk('public')->exists($album->thumbnail)) {
-            Storage::disk('public')->delete($album->thumbnail);
+        if ($album->thumbnail && Storage::disk('s3')->exists($album->thumbnail)) {
+            Storage::disk('s3')->delete($album->thumbnail);
         }
 
         $album->delete();

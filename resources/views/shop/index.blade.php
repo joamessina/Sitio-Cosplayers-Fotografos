@@ -46,7 +46,7 @@
                             <a href="{{ route('shop.show', $item) }}" class="block">
                                 <div class="aspect-[4/3] bg-gray-100 dark:bg-gray-800 relative overflow-hidden">
                                     @if ($item->photos && count($item->photos) > 0)
-                                        <img src="{{ asset('storage/' . $item->photos[0]) }}"
+                                        <img src="{{ storage_url($item->photos[0]) }}"
                                              alt="{{ $item->title }}"
                                              class="w-full h-full object-cover hover:scale-105 transition duration-300">
                                     @else

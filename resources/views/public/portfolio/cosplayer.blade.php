@@ -42,7 +42,7 @@
                 {{-- Background: cover image or gradient --}}
                 @if($user->cosplayerProfile?->cover_path)
                     <div class="absolute inset-0">
-                        <img src="{{ asset('storage/' . $user->cosplayerProfile?->cover_path) }}" alt="Portada" class="w-full h-full object-cover">
+                        <img src="{{ storage_url($user->cosplayerProfile?->cover_path) }}" alt="Portada" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black/50"></div>
                     </div>
                 @else
@@ -56,7 +56,7 @@
                     <div class="flex-shrink-0">
                         @if($user->cosplayerProfile?->avatar_path)
                             <div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-white/30">
-                                <img src="{{ asset('storage/' . $user->cosplayerProfile?->avatar_path) }}" alt="{{ $user->cosplayerProfile?->display_name ?? $user->name }}" class="w-full h-full object-cover">
+                                <img src="{{ storage_url($user->cosplayerProfile?->avatar_path) }}" alt="{{ $user->cosplayerProfile?->display_name ?? $user->name }}" class="w-full h-full object-cover">
                             </div>
                         @else
                             <div class="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-4 ring-white/30">
@@ -144,7 +144,7 @@
                                 {{-- Skeleton placeholder --}}
                                 <div class="skeleton-img absolute inset-0"></div>
 
-                                <img src="{{ asset('storage/' . $photo->path) }}"
+                                <img src="{{ storage_url($photo->path) }}"
                                      alt="{{ $photo->caption ?? 'Foto de cosplay' }}"
                                      class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                      onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'">

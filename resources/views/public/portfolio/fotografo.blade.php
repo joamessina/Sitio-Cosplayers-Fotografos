@@ -42,7 +42,7 @@
                 {{-- Background: cover image or gradient --}}
                 @if($user->photographerProfile?->cover_path)
                     <div class="absolute inset-0">
-                        <img src="{{ asset('storage/' . $user->photographerProfile?->cover_path) }}" alt="Portada" class="w-full h-full object-cover">
+                        <img src="{{ storage_url($user->photographerProfile?->cover_path) }}" alt="Portada" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black/50"></div>
                     </div>
                 @else
@@ -56,7 +56,7 @@
                     <div class="flex-shrink-0">
                         @if($user->photographerProfile?->avatar_path)
                             <div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-white/30">
-                                <img src="{{ asset('storage/' . $user->photographerProfile?->avatar_path) }}" alt="{{ $user->photographerProfile?->display_name ?? $user->name }}" class="w-full h-full object-cover">
+                                <img src="{{ storage_url($user->photographerProfile?->avatar_path) }}" alt="{{ $user->photographerProfile?->display_name ?? $user->name }}" class="w-full h-full object-cover">
                             </div>
                         @else
                             <div class="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-4 ring-white/30">
@@ -172,7 +172,7 @@
                                     class="gallery-item aspect-video portfolio-gradient opacity-20 flex items-center justify-center overflow-hidden relative">
                                     @if ($album->thumbnail)
                                         <div class="skeleton-img absolute inset-0"></div>
-                                        <img src="{{ asset('storage/' . $album->thumbnail) }}"
+                                        <img src="{{ storage_url($album->thumbnail) }}"
                                             alt="{{ $album->title }}" class="w-full h-full object-cover"
                                             onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'">
                                     @else

@@ -38,7 +38,7 @@ public function index()
 ]);
 
 
-        $path = $request->file('photo')->store('cosplayers/' . auth()->id(), 'public');
+        $path = $request->file('photo')->store('cosplayers/' . auth()->id(), 's3');
 
         CosplayerPhoto::create([
             'user_id' => auth()->id(),
@@ -53,7 +53,7 @@ public function index()
     {
         abort_unless($photo->user_id === auth()->id(), 403);
 
-        Storage::disk('public')->delete($photo->path);
+        Storage::disk('s3')->delete($photo->path);
         $photo->delete();
 
         return redirect()->route('cosplayer.fotos.index')->with('status', 'Foto eliminada ✅');

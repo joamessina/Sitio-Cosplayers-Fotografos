@@ -133,7 +133,7 @@
                                 <a href="{{ route('cosplayer.fotos.index') }}"
                                     class="group block overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700">
                                     <div class="aspect-square">
-                                        <img src="{{ asset('storage/' . $p->path) }}" alt="foto"
+                                        <img src="{{ storage_url($p->path) }}" alt="foto"
                                             class="h-full w-full object-cover transition group-hover:scale-105">
                                     </div>
                                 </a>

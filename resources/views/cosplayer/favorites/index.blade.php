@@ -46,7 +46,7 @@
                             <div
                                 class="aspect-video bg-gradient-to-br from-pink-100 dark:from-pink-900/30 to-purple-100 dark:to-purple-900/30 flex items-center justify-center relative overflow-hidden">
                                 @if ($album->thumbnail)
-                                    <img src="{{ asset('storage/' . $album->thumbnail) }}" alt="{{ $album->title }}"
+                                    <img src="{{ storage_url($album->thumbnail) }}" alt="{{ $album->title }}"
                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                                 @else
                                     <svg class="w-16 h-16 text-pink-300" fill="none" stroke="currentColor"

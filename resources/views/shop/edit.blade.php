@@ -129,7 +129,7 @@
                                         {{-- Marco: indigo si es portada --}}
                                         <div class="aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 transition"
                                              :class="coverPhoto === @json($photo) ? 'ring-2 ring-indigo-500' : 'ring-1 ring-gray-200 dark:ring-gray-700'">
-                                            <img src="{{ asset('storage/' . $photo) }}"
+                                            <img src="{{ storage_url($photo) }}"
                                                  alt="foto"
                                                  class="w-full h-full object-cover">
                                         </div>

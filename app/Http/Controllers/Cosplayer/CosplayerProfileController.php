@@ -66,12 +66,12 @@ class CosplayerProfileController extends Controller
         // Avatar
         if ($request->hasFile('avatar')) {
             if ($profile && $profile->avatar_path) {
-                Storage::disk('public')->delete($profile->avatar_path);
+                Storage::disk('s3')->delete($profile->avatar_path);
             }
-            $data['avatar_path'] = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar_path'] = $request->file('avatar')->store('avatars', 's3');
         } elseif ($request->boolean('remove_avatar')) {
             if ($profile && $profile->avatar_path) {
-                Storage::disk('public')->delete($profile->avatar_path);
+                Storage::disk('s3')->delete($profile->avatar_path);
             }
             $data['avatar_path'] = null;
         }
@@ -79,12 +79,12 @@ class CosplayerProfileController extends Controller
         // Cover
         if ($request->hasFile('cover')) {
             if ($profile && $profile->cover_path) {
-                Storage::disk('public')->delete($profile->cover_path);
+                Storage::disk('s3')->delete($profile->cover_path);
             }
-            $data['cover_path'] = $request->file('cover')->store('covers', 'public');
+            $data['cover_path'] = $request->file('cover')->store('covers', 's3');
         } elseif ($request->boolean('remove_cover')) {
             if ($profile && $profile->cover_path) {
-                Storage::disk('public')->delete($profile->cover_path);
+                Storage::disk('s3')->delete($profile->cover_path);
             }
             $data['cover_path'] = null;
         }

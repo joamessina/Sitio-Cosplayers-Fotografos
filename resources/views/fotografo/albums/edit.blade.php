@@ -123,7 +123,7 @@
 
                         @if ($album->thumbnail)
                             <div class="mb-4">
-                                <img src="{{ asset('storage/' . $album->thumbnail) }}" alt="Miniatura actual"
+                                <img src="{{ storage_url($album->thumbnail) }}" alt="Miniatura actual"
                                     class="w-48 h-48 object-cover rounded-xl ring-2 ring-gray-200 dark:ring-gray-700 shadow-sm">
                                 <p class="text-xs text-gray-500 mt-2">Imagen actual (subí una nueva para reemplazarla)
                                 </p>

@@ -38,7 +38,8 @@ class ShopItemController extends Controller
             'description' => ['nullable', 'string', 'max:2000'],
             'price'       => ['required', 'numeric', 'min:0', 'max:9999999'],
             'instagram'   => ['nullable', 'string', 'max:100', 'regex:/^[a-zA-Z0-9._]+$/'],
-            'photos'      => ['nullable', 'array', 'max:10'],
+            'cover_photo' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:51200'],
+            'photos'      => ['nullable', 'array', 'max:9'],
             'photos.*'    => ['image', 'mimes:jpeg,png,jpg,webp', 'max:51200'],
         ], [
             'title.required'      => 'El título es obligatorio',
@@ -48,15 +49,27 @@ class ShopItemController extends Controller
             'price.numeric'       => 'El precio debe ser un número',
             'price.min'           => 'El precio no puede ser negativo',
             'instagram.regex'     => 'El handle de Instagram solo puede tener letras, números, puntos y guiones bajos',
-            'photos.max'          => 'Podés subir hasta 10 fotos',
+            'cover_photo.required' => 'La foto de portada es obligatoria',
+            'cover_photo.image'   => 'La portada debe ser una imagen',
+            'cover_photo.mimes'   => 'La portada debe ser JPG, PNG o WEBP',
+            'cover_photo.max'     => 'La portada no puede superar los 50MB',
+            'photos.max'          => 'Podés subir hasta 9 fotos adicionales',
             'photos.*.image'      => 'Todos los archivos deben ser imágenes',
             'photos.*.mimes'      => 'Las imágenes deben ser JPG, PNG o WEBP',
             'photos.*.max'        => 'Cada imagen no puede superar los 50MB',
         ]);
 
         $photoPaths = [];
+
+        // Foto de portada siempre es la primera
+        if ($request->hasFile('cover_photo')) {
+            $photoPaths[] = $request->file('cover_photo')->store('shop-items', 's3');
+        }
+
+        // Fotos adicionales
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
+                if (count($photoPaths) >= 10) break;
                 $photoPaths[] = $photo->store('shop-items', 's3');
             }
         }

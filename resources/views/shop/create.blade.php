@@ -99,11 +99,37 @@
                         <p class="text-xs text-gray-400 mt-1">Sin @. Solo letras, números, puntos y guiones bajos.</p>
                     </div>
 
-                    {{-- Fotos --}}
+                    {{-- Foto de portada --}}
+                    <div>
+                        <label for="cover_photo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Foto de portada <span class="text-red-500">*</span>
+                        </label>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                            Esta foto se mostrará en el listado principal del shop
+                        </p>
+                        <input type="file"
+                               name="cover_photo"
+                               id="cover_photo"
+                               required
+                               accept="image/jpeg,image/png,image/jpg,image/webp"
+                               class="block w-full text-sm text-gray-500 dark:text-gray-400
+                                      file:mr-4 file:py-2 file:px-4
+                                      file:rounded-lg file:border-0
+                                      file:text-sm file:font-semibold
+                                      file:bg-indigo-50 file:text-indigo-700
+                                      dark:file:bg-indigo-900/30 dark:file:text-indigo-400
+                                      hover:file:bg-indigo-100 dark:hover:file:bg-indigo-900/50
+                                      file:cursor-pointer cursor-pointer">
+                    </div>
+
+                    {{-- Fotos adicionales --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Fotos (hasta 10, máx. 50MB c/u)
+                            Fotos adicionales de la galería
                         </label>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                            Opcional. Podés agregar hasta 9 fotos más (máx. 50MB c/u)
+                        </p>
                         <input type="file"
                                name="photos[]"
                                id="filepond"
@@ -164,10 +190,10 @@
 
         const pond = FilePond.create(document.querySelector('#filepond'), {
             allowMultiple: true,
-            maxFiles: 10,
+            maxFiles: 9,
             maxFileSize: '50MB',
             acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'],
-            labelIdle: 'Arrastrá fotos o <span class="filepond--label-action">navegá</span>',
+            labelIdle: 'Arrastrá fotos adicionales o <span class="filepond--label-action">navegá</span>',
             labelMaxFileSizeExceeded: 'Archivo muy grande',
             labelMaxFileSize: 'Máximo: {filesize}',
             labelFileTypeNotAllowed: 'Solo imágenes JPG, PNG o WEBP',
@@ -191,6 +217,13 @@
                 if (el && el.value) formData.append(field, el.value);
             });
 
+            // Foto de portada (obligatoria)
+            const coverPhotoInput = document.getElementById('cover_photo');
+            if (coverPhotoInput.files[0]) {
+                formData.append('cover_photo', coverPhotoInput.files[0]);
+            }
+
+            // Fotos adicionales de FilePond
             pond.getFiles().forEach(fileItem => {
                 formData.append('photos[]', fileItem.file);
             });

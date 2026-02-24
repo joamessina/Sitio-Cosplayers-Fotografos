@@ -125,7 +125,7 @@
                             </label>
                             <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
                                 @foreach ($shopItem->photos as $photo)
-                                    <div class="relative group">
+                                    <div class="relative group" x-data="{ markedForDelete: false }">
                                         {{-- Marco: indigo si es portada --}}
                                         <div class="aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 transition"
                                              :class="coverPhoto === @json($photo) ? 'ring-2 ring-indigo-500' : 'ring-1 ring-gray-200 dark:ring-gray-700'">
@@ -134,27 +134,32 @@
                                                  class="w-full h-full object-cover">
                                         </div>
 
-                                        {{-- Overlay eliminar (hover) --}}
-                                        <label class="absolute inset-0 flex items-center justify-center bg-red-600/80 opacity-0 group-hover:opacity-100 transition rounded-xl cursor-pointer">
+                                        {{-- Overlay eliminar --}}
+                                        <label class="absolute inset-0 flex items-center justify-center bg-red-600/80 rounded-xl cursor-pointer transition"
+                                               :class="markedForDelete ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'">
                                             <input type="checkbox"
                                                    name="remove_photos[]"
                                                    value="{{ $photo }}"
-                                                   class="sr-only peer">
-                                            <span class="text-white text-xs font-semibold peer-checked:hidden">Eliminar</span>
-                                            <span class="text-white text-xs font-semibold hidden peer-checked:block">✓ Marcada</span>
+                                                   class="sr-only"
+                                                   @change="markedForDelete = $el.checked">
+                                            <span class="text-white text-sm font-bold" x-show="!markedForDelete">✕ Eliminar</span>
+                                            <span class="text-white text-sm font-bold" x-show="markedForDelete" x-cloak>✓ Se eliminará</span>
                                         </label>
 
                                         {{-- Botón portada --}}
                                         <button type="button"
                                                 @click.stop="coverPhoto = @json($photo)"
-                                                class="absolute bottom-1 left-1 z-10 rounded-full px-2 py-0.5 text-xs font-semibold transition-colors"
-                                                :class="coverPhoto === @json($photo) ? 'bg-indigo-600 text-white' : 'bg-black/50 text-white hover:bg-indigo-500'">
-                                            <span x-text="coverPhoto === @json($photo) ? '★ Portada' : 'Portada'"></span>
+                                                class="absolute bottom-2 left-2 z-10 rounded-lg px-2.5 py-1 text-xs font-bold shadow-lg transition-all"
+                                                :class="coverPhoto === @json($photo) ? 'bg-indigo-600 text-white ring-2 ring-white' : 'bg-black/60 text-white hover:bg-indigo-500'">
+                                            <span x-show="coverPhoto === @json($photo)">★ Portada</span>
+                                            <span x-show="coverPhoto !== @json($photo)" x-cloak>Usar de portada</span>
                                         </button>
                                     </div>
                                 @endforeach
                             </div>
-                            <p class="text-xs text-gray-400 mt-2">Hover → eliminar foto &nbsp;·&nbsp; "Portada" → elegir foto principal del listado.</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+                                💡 <strong>Clic en una foto</strong> para eliminarla. La foto con <strong class="text-indigo-600 dark:text-indigo-400">★ Portada</strong> es la que se muestra en el listado del shop.
+                            </p>
                         </div>
                     @endif
 

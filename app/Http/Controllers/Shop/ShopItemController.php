@@ -141,6 +141,13 @@ class ShopItemController extends Controller
             }
         }
 
+        // Mover foto de portada al inicio del array
+        $coverPhoto = $request->input('cover_photo');
+        if ($coverPhoto && in_array($coverPhoto, $currentPhotos)) {
+            $currentPhotos = array_values(array_filter($currentPhotos, fn($p) => $p !== $coverPhoto));
+            array_unshift($currentPhotos, $coverPhoto);
+        }
+
         $shopItem->update([
             'title'       => $validated['title'],
             'description' => $validated['description'] ?? null,

@@ -4,15 +4,21 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\ShopItem;
+use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = ShopItem::with('user.photographerProfile', 'user.cosplayerProfile')
+        $query = ShopItem::with('user.photographerProfile', 'user.cosplayerProfile')
             ->whereIn('status', ['active', 'sold'])
-            ->latest()
-            ->paginate(12);
+            ->latest();
+
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        $items = $query->paginate(12);
 
         return view('public.shop.index', compact('items'));
     }

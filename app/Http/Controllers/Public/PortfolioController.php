@@ -43,7 +43,7 @@ class PortfolioController extends Controller
         // Cargar datos según el rol
         if ($user->role === 'fotografo') {
             $user->load('photographerProfile');
-            
+
             // Solo álbumes públicos
             $albums = $user->albums()
                 ->where('is_public', true)
@@ -51,11 +51,17 @@ class PortfolioController extends Controller
                 ->take(6)
                 ->get();
 
-            return view('public.portfolio.fotografo', compact('user', 'albums'));
-            
+            $shopItems = $user->shopItems()
+                ->whereIn('status', ['active', 'sold'])
+                ->latest()
+                ->take(6)
+                ->get();
+
+            return view('public.portfolio.fotografo', compact('user', 'albums', 'shopItems'));
+
         } elseif ($user->role === 'cosplayer') {
             $user->load('cosplayerProfile');
-            
+
             // Fotos del cosplayer
             $photos = $user->cosplayerPhotos()
                 ->where('is_public', true)
@@ -63,7 +69,13 @@ class PortfolioController extends Controller
                 ->latest()
                 ->paginate(12);
 
-            return view('public.portfolio.cosplayer', compact('user', 'photos'));
+            $shopItems = $user->shopItems()
+                ->whereIn('status', ['active', 'sold'])
+                ->latest()
+                ->take(6)
+                ->get();
+
+            return view('public.portfolio.cosplayer', compact('user', 'photos', 'shopItems'));
         }
 
         abort(404, 'Perfil no disponible');

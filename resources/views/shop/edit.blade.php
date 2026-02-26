@@ -117,48 +117,73 @@
 
                     {{-- Fotos actuales --}}
                     @if ($shopItem->photos && count($shopItem->photos) > 0)
-                        <div x-data="{ coverPhoto: @json($shopItem->photos[0]) }">
+                        <div x-data='{ coverPhoto: @json($shopItem->photos[0]) }'>
                             <input type="hidden" name="cover_photo" :value="coverPhoto">
 
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                                 Fotos actuales
                             </label>
-                            <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                                 @foreach ($shopItem->photos as $photo)
-                                    <div class="relative group" x-data="{ markedForDelete: false }">
-                                        {{-- Marco: indigo si es portada --}}
-                                        <div class="aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 transition"
-                                             :class="coverPhoto === @json($photo) ? 'ring-2 ring-indigo-500' : 'ring-1 ring-gray-200 dark:ring-gray-700'">
+                                    <div x-data="{ markedForDelete: false, hover: false }"
+                                         @mouseenter="hover = true"
+                                         @mouseleave="hover = false"
+                                         class="group flex flex-col gap-2">
+
+                                        {{-- Imagen --}}
+                                        <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 cursor-pointer"
+                                             :class='coverPhoto === @json($photo) ? "ring-2 ring-indigo-500 ring-offset-2" : "ring-1 ring-gray-200 dark:ring-gray-700"'
+                                             style="transition: box-shadow 0.2s ease">
+
                                             <img src="{{ storage_url($photo) }}"
                                                  alt="foto"
-                                                 class="w-full h-full object-cover">
+                                                 class="w-full h-full object-cover"
+                                                 style="transition: transform 0.3s ease, filter 0.3s ease"
+                                                 :style="hover ? 'transform: scale(1.04); filter: brightness(0.72)' : 'transform: scale(1); filter: brightness(1)'">
+
+                                            {{-- Badge portada --}}
+                                            <div x-show='coverPhoto === @json($photo)'
+                                                 x-transition:enter="transition ease-out duration-200"
+                                                 x-transition:enter-start="opacity-0 scale-90"
+                                                 x-transition:enter-end="opacity-100 scale-100"
+                                                 class="absolute top-2 left-2 z-10 bg-indigo-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold shadow flex items-center gap-1">
+                                                ★ Portada
+                                            </div>
+
+                                            {{-- Botón eliminar --}}
+                                            <label class="absolute top-2 right-2 z-10 cursor-pointer"
+                                                   style="transition: opacity 0.2s ease"
+                                                   :style="hover || markedForDelete ? 'opacity:1' : 'opacity:0'">
+                                                <input type="checkbox"
+                                                       name="remove_photos[]"
+                                                       value="{{ $photo }}"
+                                                       class="sr-only"
+                                                       @change="markedForDelete = $el.checked">
+                                                <div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg"
+                                                     :class="markedForDelete ? 'bg-red-700' : 'bg-red-500 hover:bg-red-600'"
+                                                     style="transition: background-color 0.15s ease, transform 0.15s ease"
+                                                     :style="markedForDelete ? 'transform: scale(1.1)' : ''">
+                                                    <span x-show="!markedForDelete">✕</span>
+                                                    <span x-show="markedForDelete" x-cloak>✓</span>
+                                                </div>
+                                            </label>
                                         </div>
 
-                                        {{-- Overlay eliminar --}}
-                                        <label class="absolute inset-0 flex items-center justify-center bg-red-600/80 rounded-xl cursor-pointer transition"
-                                               :class="markedForDelete ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'">
-                                            <input type="checkbox"
-                                                   name="remove_photos[]"
-                                                   value="{{ $photo }}"
-                                                   class="sr-only"
-                                                   @change="markedForDelete = $el.checked">
-                                            <span class="text-white text-sm font-bold" x-show="!markedForDelete">✕ Eliminar</span>
-                                            <span class="text-white text-sm font-bold" x-show="markedForDelete" x-cloak>✓ Se eliminará</span>
-                                        </label>
+                                        {{-- Botón marcar portada --}}
+                                        <div style="transition: opacity 0.2s ease, transform 0.2s ease"
+                                             :style='(hover && coverPhoto !== @json($photo)) ? "opacity:1; transform: translateY(0)" : "opacity:0; transform: translateY(-4px); pointer-events:none"'>
+                                            <button type="button"
+                                                    @click.stop='coverPhoto = @json($photo)'
+                                                    class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow transition-all duration-150">
+                                                Marcar portada
+                                            </button>
+                                        </div>
 
-                                        {{-- Botón portada --}}
-                                        <button type="button"
-                                                @click.stop="coverPhoto = @json($photo)"
-                                                class="absolute bottom-2 left-2 z-10 rounded-lg px-2.5 py-1 text-xs font-bold shadow-lg transition-all"
-                                                :class="coverPhoto === @json($photo) ? 'bg-indigo-600 text-white ring-2 ring-white' : 'bg-black/60 text-white hover:bg-indigo-500'">
-                                            <span x-show="coverPhoto === @json($photo)">★ Portada</span>
-                                            <span x-show="coverPhoto !== @json($photo)" x-cloak>Usar de portada</span>
-                                        </button>
                                     </div>
                                 @endforeach
                             </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
-                                💡 <strong>Clic en una foto</strong> para eliminarla. La foto con <strong class="text-indigo-600 dark:text-indigo-400">★ Portada</strong> es la que se muestra en el listado del shop.
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-5 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+                                💡 Pasá el mouse sobre una foto para ver las opciones.
                             </p>
                         </div>
                     @endif

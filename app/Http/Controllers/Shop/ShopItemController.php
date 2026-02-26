@@ -63,14 +63,14 @@ class ShopItemController extends Controller
 
         // Foto de portada siempre es la primera
         if ($request->hasFile('cover_photo')) {
-            $photoPaths[] = $request->file('cover_photo')->store('shop-items', 's3');
+            $photoPaths[] = $request->file('cover_photo')->store('shop-items', storage_disk());
         }
 
         // Fotos adicionales
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
                 if (count($photoPaths) >= 10) break;
-                $photoPaths[] = $photo->store('shop-items', 's3');
+                $photoPaths[] = $photo->store('shop-items', storage_disk());
             }
         }
 
@@ -141,7 +141,7 @@ class ShopItemController extends Controller
         $removePhotos = $request->input('remove_photos', []);
         foreach ($removePhotos as $path) {
             if (in_array($path, $currentPhotos)) {
-                Storage::disk('s3')->delete($path);
+                Storage::disk(storage_disk())->delete($path);
                 $currentPhotos = array_values(array_filter($currentPhotos, fn($p) => $p !== $path));
             }
         }
@@ -150,7 +150,7 @@ class ShopItemController extends Controller
         if ($request->hasFile('new_photos')) {
             foreach ($request->file('new_photos') as $photo) {
                 if (count($currentPhotos) >= 10) break;
-                $currentPhotos[] = $photo->store('shop-items', 's3');
+                $currentPhotos[] = $photo->store('shop-items', storage_disk());
             }
         }
 
@@ -183,7 +183,7 @@ class ShopItemController extends Controller
 
         // Borrar fotos del storage
         foreach ($shopItem->photos ?? [] as $path) {
-            Storage::disk('s3')->delete($path);
+            Storage::disk(storage_disk())->delete($path);
         }
 
         $shopItem->delete();

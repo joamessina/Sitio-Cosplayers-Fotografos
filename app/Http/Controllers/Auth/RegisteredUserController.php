@@ -50,7 +50,7 @@ public function store(Request $request)
     event(new Registered($user));
     Auth::login($user);
 
-    return redirect(RouteServiceProvider::HOME);
+    return redirect()->route('verification.notice');
 }
 
 }

@@ -13,7 +13,7 @@ use App\Models\Album;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 

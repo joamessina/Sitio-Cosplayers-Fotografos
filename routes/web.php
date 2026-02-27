@@ -29,14 +29,14 @@ Route::get('/dashboard', function () {
     return $role === 'fotografo'
         ? redirect()->route('fotografo.dashboard')
         : redirect()->route('cosplayer.dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 
 
 /**
  * Sección Fotógrafo
  */
-Route::middleware(['auth', 'role:fotografo'])
+Route::middleware(['auth', 'verified', 'role:fotografo'])
     ->prefix('fotografo')
     ->name('fotografo.')
     ->group(function () {
@@ -64,7 +64,7 @@ Route::middleware(['auth', 'role:fotografo'])
 /**
  * Sección Cosplayer
  */
-Route::middleware(['auth', 'role:cosplayer'])
+Route::middleware(['auth', 'verified', 'role:cosplayer'])
     ->prefix('cosplayer')
     ->name('cosplayer.')
     ->group(function () {
@@ -108,7 +108,7 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{shopItem}', [ShopController::class, 'show'])->name('shop.show');
 
 // Mi Shop (todos los usuarios autenticados)
-Route::middleware(['auth'])->prefix('mi-shop')->name('mi-shop.')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('mi-shop')->name('mi-shop.')->group(function () {
     Route::get('/', [ShopItemController::class, 'index'])->name('index');
     Route::get('/create', [ShopItemController::class, 'create'])->name('create');
     Route::post('/', [ShopItemController::class, 'store'])->name('store');
@@ -118,7 +118,7 @@ Route::middleware(['auth'])->prefix('mi-shop')->name('mi-shop.')->group(function
 });
 
 // Rutas para favoritos (solo cosplayers autenticados)
-Route::middleware(['auth', 'role:cosplayer'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:cosplayer'])->group(function () {
     Route::post('/albums/{album}/favorite', [FavoriteController::class, 'store'])->name('albums.favorite');
     Route::delete('/albums/{album}/favorite', [FavoriteController::class, 'destroy'])->name('albums.unfavorite');
 });

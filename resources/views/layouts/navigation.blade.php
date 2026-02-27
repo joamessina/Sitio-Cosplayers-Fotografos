@@ -102,7 +102,30 @@
 
             <!-- Settings Dropdown -->
             @auth
-                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                <div class="hidden sm:flex sm:items-center sm:ml-6 gap-3">
+                    <!-- Dark Mode Toggle -->
+                    <button
+                        x-data="{
+                            dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                            toggle() {
+                                this.dark = !this.dark;
+                                localStorage.theme = this.dark ? 'dark' : 'light';
+                                document.documentElement.classList.toggle('dark', this.dark);
+                            }
+                        }"
+                        @click="toggle()"
+                        class="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        title="Cambiar tema"
+                        aria-label="Cambiar tema"
+                    >
+                        <svg x-show="dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
@@ -137,6 +160,29 @@
             @else
                 {{-- Botones login/register para usuarios no logueados --}}
                 <div class="hidden sm:flex sm:items-center sm:ml-6 gap-4">
+                    <!-- Dark Mode Toggle -->
+                    <button
+                        x-data="{
+                            dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                            toggle() {
+                                this.dark = !this.dark;
+                                localStorage.theme = this.dark ? 'dark' : 'light';
+                                document.documentElement.classList.toggle('dark', this.dark);
+                            }
+                        }"
+                        @click="toggle()"
+                        class="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        title="Cambiar tema"
+                        aria-label="Cambiar tema"
+                    >
+                        <svg x-show="dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+
                     <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
                         Iniciar sesión
                     </a>
@@ -147,8 +193,9 @@
                 </div>
             @endauth
 
-            <!-- Dark Mode Toggle -->
-            <div class="flex items-center ml-3">
+            <!-- Hamburger -->
+            <div class="-mr-2 flex items-center sm:hidden gap-1">
+                <!-- Dark Mode Toggle (móvil) -->
                 <button
                     x-data="{
                         dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
@@ -163,19 +210,14 @@
                     title="Cambiar tema"
                     aria-label="Cambiar tema"
                 >
-                    <!-- Sol: visible en modo oscuro -->
                     <svg x-show="dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                     </svg>
-                    <!-- Luna: visible en modo claro -->
                     <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                     </svg>
                 </button>
-            </div>
 
-            <!-- Hamburger -->
-            <div class="-mr-2 flex items-center sm:hidden">
                 <button @click="open = ! open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">

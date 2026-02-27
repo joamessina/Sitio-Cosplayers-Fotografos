@@ -19,9 +19,12 @@ class HomeController extends Controller
         // Total de fotógrafos
         $totalFotografos = User::where('role', 'fotografo')->count();
 
+        // Total de cosplayers
+        $totalCosplayers = User::where('role', 'cosplayer')->count();
+
         // Total de álbumes públicos
         $totalAlbums = Album::where('is_public', true)->count();
 
-        return view('welcome', compact('latestAlbums', 'totalFotografos', 'totalAlbums'));
+        return view('welcome', compact('latestAlbums', 'totalFotografos', 'totalCosplayers', 'totalAlbums'));
     }
 }
